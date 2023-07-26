@@ -27,8 +27,8 @@ AdminModule = __decorate([
                     ignoreTLS: true,
                     secure: true,
                     auth: {
-                        user: 'your email address',
-                        pass: 'your app password'
+                        user: 'rakinsadaftab@gmail.com',
+                        pass: ''
                     },
                 }
             }),

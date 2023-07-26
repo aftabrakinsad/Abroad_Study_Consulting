@@ -11,23 +11,21 @@ import { MailerModule } from "@nestjs-modules/mailer";
 imports: [
     MailerModule.forRoot({
         transport: {
-          host: 'smtp.gmail.com',
-                   port: 465,
-                   ignoreTLS: true,
-                   secure: true,
-                   auth: {
-                       user: 'your email address',
-                       pass: 'your app password'
-                   },
-                  }
-      }),
+        host: 'smtp.gmail.com',
+            port: 465,
+            ignoreTLS: true,
+            secure: true,
+            auth: {
+                user: 'rakinsadaftab@gmail.com',
+                pass: ''
+            },
+        }
+    }),
       
     TypeOrmModule.forFeature([AdminEntity, ManagerEntity]),
-
 ],
-controllers: [AdminController],
-providers: [AdminService,ManagerService],
-
+    controllers: [AdminController],
+    providers: [AdminService, ManagerService],
 })
 
 export class AdminModule {}

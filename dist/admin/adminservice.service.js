@@ -27,9 +27,8 @@ let AdminService = class AdminService {
     getIndex() {
         return this.adminRepo.find();
     }
-    async getUserByID(id) {
+    async getAdminById(id) {
         const data = await this.adminRepo.findOneBy({ id });
-        console.log(data);
         if (data !== null) {
             return data;
         }
@@ -37,25 +36,22 @@ let AdminService = class AdminService {
             throw new common_1.HttpException('Not Found', common_1.HttpStatus.NOT_FOUND);
         }
     }
-    getUserByIDName(qry) {
-        return this.adminRepo.findOneBy({ id: qry.id, name: qry.name });
-    }
-    async insertUser(mydto) {
+    async addAdmin(mydto) {
         const salt = await bcrypt.genSalt();
         const hassedpassed = await bcrypt.hash(mydto.password, salt);
         mydto.password = hassedpassed;
         return this.adminRepo.save(mydto);
     }
-    updateUser(name, email) {
+    updateAdmin(name, email) {
         return this.adminRepo.update({ email: email }, { name: name });
     }
-    updateUserbyid(mydto, id) {
+    updateAdminbyId(mydto, id) {
         return this.adminRepo.update(id, mydto);
     }
-    deleteUserbyid(id) {
+    deleteAdminbyId(id) {
         return this.adminRepo.delete(id);
     }
-    getManagersByAdminID(id) {
+    ManagersByAdminId(id) {
         return this.adminRepo.find({
             where: { id: id },
             relations: {
@@ -84,7 +80,7 @@ let AdminService = class AdminService {
             return false;
         }
     }
-    async sendEmail(mydata) {
+    async Email(mydata) {
         return await this.mailerService.sendMail({
             to: mydata.email,
             subject: mydata.subject,

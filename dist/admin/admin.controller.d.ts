@@ -7,17 +7,15 @@ export declare class AdminController {
     private adminService;
     private managerService;
     constructor(adminService: AdminService, managerService: ManagerService);
-    gethellow(): any;
     getAdmin(): any;
     getAdminByID(id: number): any;
-    getAdminByIDName(qry: any): any;
     insertAdmin(mydto: AdminForm): Promise<any>;
     updateAdmin(session: any, name: string): any;
     updateAdminbyid(mydto: AdminFormUpdate, id: number): any;
-    deleteAdminbyid(id: number): any;
-    insertManager(managerdto: ManagerForm): any;
-    getManagerByAdminID(id: number): any;
-    getAdminByManagerID(id: number): any;
+    deleteAdminbyId(id: number): any;
+    addManager(managerdto: ManagerForm): any;
+    getManagerByAdminId(id: number): any;
+    getAdminByManagerId(id: number): any;
     signup(mydto: AdminForm): Promise<any>;
     signin(session: any, mydto: AdminForm): Promise<any>;
     signout(session: any): {

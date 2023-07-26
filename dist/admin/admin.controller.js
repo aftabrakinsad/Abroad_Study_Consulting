@@ -26,43 +26,34 @@ let AdminController = class AdminController {
         this.adminService = adminService;
         this.managerService = managerService;
     }
-    gethellow() {
-        return "hellow";
-    }
     getAdmin() {
         return this.adminService.getIndex();
     }
     getAdminByID(id) {
-        return this.adminService.getUserByID(id);
-    }
-    getAdminByIDName(qry) {
-        return this.adminService.getUserByIDName(qry);
+        return this.adminService.getAdminById(id);
     }
     insertAdmin(mydto) {
-        console.log(mydto);
-        return this.adminService.insertUser(mydto);
+        return this.adminService.addAdmin(mydto);
     }
     updateAdmin(session, name) {
-        console.log(session.email);
-        return this.adminService.updateUser(name, session.email);
+        return this.adminService.updateAdmin(name, session.email);
     }
     updateAdminbyid(mydto, id) {
-        return this.adminService.updateUserbyid(mydto, id);
+        return this.adminService.updateAdminbyId(mydto, id);
     }
-    deleteAdminbyid(id) {
-        return this.adminService.deleteUserbyid(id);
+    deleteAdminbyId(id) {
+        return this.adminService.deleteAdminbyId(id);
     }
-    insertManager(managerdto) {
+    addManager(managerdto) {
         return this.managerService.insertManager(managerdto);
     }
-    getManagerByAdminID(id) {
-        return this.adminService.getManagersByAdminID(id);
+    getManagerByAdminId(id) {
+        return this.adminService.ManagersByAdminId(id);
     }
-    getAdminByManagerID(id) {
+    getAdminByManagerId(id) {
         return this.managerService.getAdminByManagerID(id);
     }
     signup(mydto) {
-        console.log(mydto);
         return this.adminService.signup(mydto);
     }
     async signin(session, mydto) {
@@ -84,15 +75,9 @@ let AdminController = class AdminController {
         }
     }
     sendEmail(mydata) {
-        return this.adminService.sendEmail(mydata);
+        return this.adminService.Email(mydata);
     }
 };
-__decorate([
-    (0, common_1.Get)('/'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Object)
-], AdminController.prototype, "gethellow", null);
 __decorate([
     (0, common_1.Get)('/index'),
     __metadata("design:type", Function),
@@ -100,28 +85,21 @@ __decorate([
     __metadata("design:returntype", Object)
 ], AdminController.prototype, "getAdmin", null);
 __decorate([
-    (0, common_1.Get)('/findadmin/:id'),
+    (0, common_1.Get)('/findAdmin/:id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Object)
 ], AdminController.prototype, "getAdminByID", null);
 __decorate([
-    (0, common_1.Get)('/findadmin'),
-    __param(0, (0, common_1.Query)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Object)
-], AdminController.prototype, "getAdminByIDName", null);
-__decorate([
-    (0, common_1.Post)('/insertadmin'),
+    (0, common_1.Post)('/addAdmin'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [adminform_dto_1.AdminForm]),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "insertAdmin", null);
 __decorate([
-    (0, common_1.Put)('/updateadmin/'),
+    (0, common_1.Put)('/updateAdmin/'),
     (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     (0, common_1.UsePipes)(new common_1.ValidationPipe()),
     __param(0, (0, common_1.Session)()),
@@ -131,7 +109,7 @@ __decorate([
     __metadata("design:returntype", Object)
 ], AdminController.prototype, "updateAdmin", null);
 __decorate([
-    (0, common_1.Put)('/updateadmin/:id'),
+    (0, common_1.Put)('/updateAdmin/:id'),
     (0, common_1.UsePipes)(new common_1.ValidationPipe()),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Param)('id', common_1.ParseIntPipe)),
@@ -145,29 +123,29 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Object)
-], AdminController.prototype, "deleteAdminbyid", null);
+], AdminController.prototype, "deleteAdminbyId", null);
 __decorate([
-    (0, common_1.Post)('/insertmanager'),
+    (0, common_1.Post)('/addManager'),
     (0, common_1.UsePipes)(new common_1.ValidationPipe()),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [manager_dto_1.ManagerForm]),
     __metadata("design:returntype", Object)
-], AdminController.prototype, "insertManager", null);
+], AdminController.prototype, "addManager", null);
 __decorate([
-    (0, common_1.Get)('/findmanagersbyadmin/:id'),
+    (0, common_1.Get)('/managersbyAdmin/:id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Object)
-], AdminController.prototype, "getManagerByAdminID", null);
+], AdminController.prototype, "getManagerByAdminId", null);
 __decorate([
-    (0, common_1.Get)('/findadminbymanager/:id'),
+    (0, common_1.Get)('/adminbyManager/:id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Object)
-], AdminController.prototype, "getAdminByManagerID", null);
+], AdminController.prototype, "getAdminByManagerId", null);
 __decorate([
     (0, common_1.Post)('/signup'),
     (0, common_1.UsePipes)(new common_1.ValidationPipe()),
@@ -193,7 +171,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "signout", null);
 __decorate([
-    (0, common_1.Post)('/sendemail'),
+    (0, common_1.Post)('/email'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
