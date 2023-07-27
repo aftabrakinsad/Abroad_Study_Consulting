@@ -63,15 +63,19 @@ let AdminService = class AdminService {
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(mydto.password, salt);
         mydto.password = hashedPassword;
-        const existingUser = await this.adminRepo.findOne({ where: { name: mydto.name } });
-        if (existingUser) {
-            throw new common_1.HttpException({ message: "Username already exists" }, common_1.HttpStatus.BAD_REQUEST);
-        }
+        const existingAdmin = await this.adminRepo.findOne({ where: { name: mydto.name } });
+        const existingAdminEmail = await this.adminRepo.findOne({ where: { email: mydto.email } });
         if (mydto.name === '') {
             throw new common_1.HttpException({ message: "Please provide the username" }, common_1.HttpStatus.BAD_REQUEST);
         }
         else if (mydto.address === '') {
             throw new common_1.HttpException({ message: "Please provide the address" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else if (existingAdmin) {
+            throw new common_1.HttpException({ message: "Username already exists" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else if (existingAdminEmail) {
+            throw new common_1.HttpException({ message: "Email already exists" }, common_1.HttpStatus.BAD_REQUEST);
         }
         else {
             await this.adminRepo.save(mydto);

@@ -61,34 +61,6 @@ export class AdminService {
             },
         });
     }
-        
-    // async signup(mydto)
-    // {
-    //     const salt = await bcrypt.genSalt();
-    //     const hassedpassed = await bcrypt.hash(mydto.password, salt);
-    //     mydto.password = hassedpassed;
-    //     if(true)
-    //     {
-    //         if(mydto.name === '')
-    //         {
-    //             throw new HttpException({ message: "Please provide the username" }, HttpStatus.BAD_REQUEST);
-    //         }
-    //         else if(mydto.address === '')
-    //         {
-    //             throw new HttpException({ message: "Please provide the address" }, HttpStatus.BAD_REQUEST);
-    //         }
-    //         else if(mydto.name === Body.name)
-    //         {
-    //             console.log(Body.name);
-    //             throw new HttpException({ message: "Username already exists" }, HttpStatus.BAD_REQUEST);
-    //         }
-    //         else
-    //         {
-    //             await this.adminRepo.save(mydto)
-    //             throw new HttpException('Registration Successfull', HttpStatus.OK);
-    //         }
-    //     }
-    // }
 
     async signup(mydto)
     {
@@ -96,17 +68,27 @@ export class AdminService {
         const hashedPassword = await bcrypt.hash(mydto.password, salt);
         mydto.password = hashedPassword;
 
-        const existingUser = await this.adminRepo.findOne({ where: { name: mydto.name } });
+        const existingAdmin = await this.adminRepo.findOne({ where: { name: mydto.name } });
+        const existingAdminEmail = await this.adminRepo.findOne({ where: { email: mydto.email } });
 
-        if (existingUser) {
+        if (mydto.name === '')
+        {
+            throw new HttpException({ message: "Please provide the username" }, HttpStatus.BAD_REQUEST);
+        } 
+        else if (mydto.address === '')
+        {
+            throw new HttpException({ message: "Please provide the address" }, HttpStatus.BAD_REQUEST);
+        }
+        else if (existingAdmin)
+        {
             throw new HttpException({ message: "Username already exists" }, HttpStatus.BAD_REQUEST);
         }
-
-        if (mydto.name === '') {
-            throw new HttpException({ message: "Please provide the username" }, HttpStatus.BAD_REQUEST);
-        } else if (mydto.address === '') {
-            throw new HttpException({ message: "Please provide the address" }, HttpStatus.BAD_REQUEST);
-        } else {
+        else if(existingAdminEmail)
+        {
+            throw new HttpException({ message: "Email already exists" }, HttpStatus.BAD_REQUEST);
+        }
+        else 
+        {
             await this.adminRepo.save(mydto);
             throw new HttpException('Registration Successful', HttpStatus.OK);
         }
