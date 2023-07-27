@@ -35,7 +35,7 @@ __decorate([
     __metadata("design:type", String)
 ], Admin.prototype, "address", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => manager_entity_1.ManagerEntity, (manager) => manager.admins),
+    (0, typeorm_1.OneToMany)(() => manager_entity_1.Manager, (manager) => manager.admin),
     __metadata("design:type", Array)
 ], Admin.prototype, "managers", void 0);
 Admin = __decorate([

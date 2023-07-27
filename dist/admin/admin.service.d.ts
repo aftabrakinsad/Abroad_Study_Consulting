@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { Admin } from "./admin.entity";
+import { Admin } from "../entities/admin.entity";
 import { AdminUpdateDto } from "./admin-update.dto";
 import { MailerService } from "@nestjs-modules/mailer/dist";
 export declare class AdminService {
@@ -7,7 +7,13 @@ export declare class AdminService {
     private mailerService;
     constructor(adminRepo: Repository<Admin>, mailerService: MailerService);
     getIndex(): any;
-    getAdminById(id: any): Promise<Admin>;
+    myprofie(email: any): Promise<any>;
+    getAdminById(id: any): Promise<{
+        username: string;
+        email: string;
+        address: string;
+        managers: import("../entities/manager.entity").Manager[];
+    }>;
     addAdmin(mydto: any): Promise<any>;
     updateAdmin(username: any, email: any): any;
     updateAdminbyId(mydto: AdminUpdateDto, id: any): any;

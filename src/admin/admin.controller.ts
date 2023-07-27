@@ -14,12 +14,12 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { HttpException, UnauthorizedException } from '@nestjs/common/exceptions';
-import { ManagerForm } from 'src/manager/manager.dto';
 import { ManagerService } from 'src/manager/manager.service';
 import { AdminUpdateDto } from './admin-update.dto';
 import { AdminService } from './admin.service';
 import { SessionGuard } from './session.guard';
-import { AdminDto } from './admin.dto';
+import { AdminDto } from '../dtos/admin.dto';
+import { ManagerDto } from 'src/dtos/manager.dto';
 
 @Controller('admin')
 export class AdminController {
@@ -32,13 +32,21 @@ export class AdminController {
   getAdmin(): any {
     return this.adminService.getIndex();
   }
+
+  @Get('/profile')
+  @UseGuards(SessionGuard)
+  getProfile(@Session() session): any {
+    return this.adminService.myprofie(session.email);
+  }
   
-  @Get('/findAdmin/:id')
+  @Get('/:id')
+  @UseGuards(SessionGuard)
   getAdminByID(@Param('id', ParseIntPipe) id: number): any {
     return this.adminService.getAdminById(id);
   }
 
   @Post('/addAdmin')
+  @UseGuards(SessionGuard)
   @UsePipes(new ValidationPipe())
   addAdmin(@Body() mydto: AdminDto)
   {
@@ -55,20 +63,32 @@ export class AdminController {
   }
 
   @Put('/updateAdmin/:id')
+  @UseGuards(SessionGuard)
   @UsePipes(new ValidationPipe())
   updateAdminbyid(@Body() mydto: AdminUpdateDto, @Param('id', ParseIntPipe) id: number): any {
     return this.adminService.updateAdminbyId(mydto, id);
   }
 
   @Delete('/deleteadmin/:id')
+  @UseGuards(SessionGuard)
   deleteAdminbyId(@Param('id', ParseIntPipe) id: number): any {
     return this.adminService.deleteAdminbyId(id);
   }
 
+  // @Post('/addManager')
+  // @UseGuards(SessionGuard)
+  // @UsePipes(new ValidationPipe())
+  // addManager(@Body() managerdto: ManagerDto): any {
+  //   return this.managerService.addManager(managerdto);
+  // }
+
   @Post('/addManager')
+  @UseGuards(SessionGuard)
   @UsePipes(new ValidationPipe())
-  addManager(@Body() managerdto: ManagerForm): any {
-      return this.managerService.addManager(managerdto);
+  async addManager(@Body() managerDto: ManagerDto, adminDto: AdminDto): Promise<any> {
+      const adminId = adminDto.id;
+      console.log(adminId);
+      return this.managerService.addManager(managerDto, adminId);
   }
    
   @Get('/managersbyAdmin/:id')
@@ -77,6 +97,7 @@ export class AdminController {
   }
   
   @Get('/adminbyManager/:id')
+  @UseGuards(SessionGuard)
   getAdminByManagerId(@Param('id', ParseIntPipe) id: number): any {
     return this.managerService.getAdminByManagerID(id);
   }
@@ -90,13 +111,14 @@ export class AdminController {
 
   @Post('/signin')
   @UsePipes(new ValidationPipe())
-  async signin(@Session() session, @Body() mydto: AdminDto)
-  {
-    const res = await (this.adminService.signin(mydto));
-    if(res == true)
+  async signin(@Session() session, @Body() mydto: AdminDto) {
+    const res = await this.adminService.signin(mydto);
+    if (res == true)
     {
+      session.adminId = mydto.id;
       session.email = mydto.email;
       console.log(session.email);
+      console.log(session.adminId);
       throw new HttpException({ message: "Login Successful!" }, HttpStatus.ACCEPTED);
     }
     else
@@ -106,6 +128,7 @@ export class AdminController {
   }
 
   @Get('/signout')
+  @UseGuards(SessionGuard)
   signout(@Session() session)
   {
     if(session.destroy())
@@ -119,6 +142,7 @@ export class AdminController {
   }
 
   @Post('/email')
+  @UseGuards(SessionGuard)
   sendEmail(@Body() mydata){
     return this.adminService.Email(mydata);
   }

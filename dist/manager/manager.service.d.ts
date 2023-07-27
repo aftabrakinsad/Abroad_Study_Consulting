@@ -1,9 +1,9 @@
 import { Repository } from 'typeorm';
-import { ManagerForm } from "./manager.dto";
-import { ManagerEntity } from "./manager.entity";
+import { Manager } from "../entities/manager.entity";
+import { ManagerDto } from "../dtos/manager.dto";
 export declare class ManagerService {
     private managerRepo;
-    constructor(managerRepo: Repository<ManagerEntity>);
-    addManager(mydto: ManagerForm): any;
+    constructor(managerRepo: Repository<Manager>);
+    addManager(managerDto: ManagerDto, adminId: number): Promise<Manager>;
     getAdminByManagerID(id: any): any;
 }

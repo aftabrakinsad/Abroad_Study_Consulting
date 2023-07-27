@@ -11,12 +11,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
-const admin_entity_1 = require("./admin.entity");
+const admin_entity_1 = require("../entities/admin.entity");
 const bcrypt = require("bcrypt");
 const dist_1 = require("@nestjs-modules/mailer/dist");
 let AdminService = class AdminService {
@@ -27,10 +38,21 @@ let AdminService = class AdminService {
     getIndex() {
         return this.adminRepo.find();
     }
-    async getAdminById(id) {
-        const data = await this.adminRepo.findOneBy({ id });
+    async myprofie(email) {
+        const data = await this.adminRepo.findOne({ where: { email } });
         if (data !== null) {
-            return data;
+            const { id, password } = data, filteredData = __rest(data, ["id", "password"]);
+            return filteredData;
+        }
+        else {
+            throw new common_1.HttpException('Not Found', common_1.HttpStatus.NOT_FOUND);
+        }
+    }
+    async getAdminById(id) {
+        const data = await this.adminRepo.findOne({ where: { id } });
+        if (data !== null) {
+            const { id, password } = data, filteredData = __rest(data, ["id", "password"]);
+            return filteredData;
         }
         else {
             throw new common_1.HttpException('Not Found', common_1.HttpStatus.NOT_FOUND);

@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable, UnauthorizedException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Admin } from "./admin.entity";
+import { Admin } from "../entities/admin.entity";
 import { AdminUpdateDto } from "./admin-update.dto";
 import * as bcrypt from 'bcrypt';
 import { MailerService } from "@nestjs-modules/mailer/dist";
@@ -17,14 +17,30 @@ export class AdminService {
         return this.adminRepo.find();
     }
 
+    async myprofie(email): Promise<any>
+    {
+        const data = await this.adminRepo.findOne({ where: { email } });
+        if (data !== null)
+        {
+            const { id, password, ...filteredData } = data;
+            return filteredData;
+        }
+        else
+        {
+            throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+        }
+    }
+
     async getAdminById(id)
     {
-        const data = await this.adminRepo.findOneBy({ id });
-        // console.log(data);
-        if(data !== null) {
-            return data;
+        const data = await this.adminRepo.findOne({ where: { id } });
+
+        if (data !== null)
+        {
+            const { id, password, ...filteredData } = data;
+            return filteredData;
         }
-        else 
+        else
         {
             throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
         }
@@ -39,7 +55,7 @@ export class AdminService {
 
     updateAdmin(username, email): any
     {
-    return this.adminRepo.update({ email:email },{ username:username });
+        return this.adminRepo.update({ email:email },{ username:username });
     }
 
     updateAdminbyId(mydto: AdminUpdateDto, id): any

@@ -16,26 +16,35 @@ exports.ManagerService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
-const manager_entity_1 = require("./manager.entity");
+const manager_entity_1 = require("../entities/manager.entity");
+const admin_entity_1 = require("../entities/admin.entity");
 let ManagerService = class ManagerService {
     constructor(managerRepo) {
         this.managerRepo = managerRepo;
     }
-    addManager(mydto) {
-        return this.managerRepo.save(mydto);
+    async addManager(managerDto, adminId) {
+        const newManager = new manager_entity_1.Manager();
+        newManager.name = managerDto.name;
+        newManager.email = managerDto.email;
+        newManager.password = managerDto.password;
+        newManager.address = managerDto.address;
+        const admin = new admin_entity_1.Admin();
+        admin.id = adminId;
+        newManager.admin = admin;
+        return this.managerRepo.save(newManager);
     }
     getAdminByManagerID(id) {
         return this.managerRepo.find({
             where: { id: id },
             relations: {
-                admins: true,
+                admin: true,
             },
         });
     }
 };
 ManagerService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(manager_entity_1.ManagerEntity)),
+    __param(0, (0, typeorm_1.InjectRepository)(manager_entity_1.Manager)),
     __metadata("design:paramtypes", [typeorm_2.Repository])
 ], ManagerService);
 exports.ManagerService = ManagerService;

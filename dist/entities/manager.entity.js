@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Manager = void 0;
-const admin_entity_1 = require("../entities/admin.entity");
+const admin_entity_1 = require("./admin.entity");
 const typeorm_1 = require("typeorm");
 let Manager = class Manager {
 };

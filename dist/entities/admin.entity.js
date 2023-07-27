@@ -9,37 +9,37 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Manager = void 0;
-const admin_entity_1 = require("../entities/admin.entity");
+exports.Admin = void 0;
+const manager_entity_1 = require("./manager.entity");
 const typeorm_1 = require("typeorm");
-let Manager = class Manager {
+let Admin = class Admin {
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
-], Manager.prototype, "id", void 0);
+], Admin.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], Manager.prototype, "name", void 0);
+], Admin.prototype, "username", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], Manager.prototype, "email", void 0);
+], Admin.prototype, "email", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], Manager.prototype, "password", void 0);
+], Admin.prototype, "password", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], Manager.prototype, "address", void 0);
+], Admin.prototype, "address", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => admin_entity_1.Admin, (admin) => admin.managers),
-    __metadata("design:type", admin_entity_1.Admin)
-], Manager.prototype, "admin", void 0);
-Manager = __decorate([
-    (0, typeorm_1.Entity)("manager")
-], Manager);
-exports.Manager = Manager;
-//# sourceMappingURL=manager.entity.js.map
+    (0, typeorm_1.OneToMany)(() => manager_entity_1.Manager, (manager) => manager.admin),
+    __metadata("design:type", Array)
+], Admin.prototype, "managers", void 0);
+Admin = __decorate([
+    (0, typeorm_1.Entity)("admin")
+], Admin);
+exports.Admin = Admin;
+//# sourceMappingURL=admin.entity.js.map

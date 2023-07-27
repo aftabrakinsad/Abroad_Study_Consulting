@@ -15,12 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminController = void 0;
 const common_1 = require("@nestjs/common");
 const exceptions_1 = require("@nestjs/common/exceptions");
-const manager_dto_1 = require("../manager/manager.dto");
 const manager_service_1 = require("../manager/manager.service");
 const admin_update_dto_1 = require("./admin-update.dto");
 const admin_service_1 = require("./admin.service");
 const session_guard_1 = require("./session.guard");
-const admin_dto_1 = require("./admin.dto");
+const admin_dto_1 = require("../dtos/admin.dto");
+const manager_dto_1 = require("../dtos/manager.dto");
 let AdminController = class AdminController {
     constructor(adminService, managerService) {
         this.adminService = adminService;
@@ -28,6 +28,9 @@ let AdminController = class AdminController {
     }
     getAdmin() {
         return this.adminService.getIndex();
+    }
+    getProfile(session) {
+        return this.adminService.myprofie(session.email);
     }
     getAdminByID(id) {
         return this.adminService.getAdminById(id);
@@ -44,8 +47,10 @@ let AdminController = class AdminController {
     deleteAdminbyId(id) {
         return this.adminService.deleteAdminbyId(id);
     }
-    addManager(managerdto) {
-        return this.managerService.addManager(managerdto);
+    async addManager(managerDto, adminDto) {
+        const adminId = adminDto.id;
+        console.log(adminId);
+        return this.managerService.addManager(managerDto, adminId);
     }
     getManagerByAdminId(id) {
         return this.adminService.ManagersByAdminId(id);
@@ -57,10 +62,12 @@ let AdminController = class AdminController {
         return this.adminService.signup(mydto);
     }
     async signin(session, mydto) {
-        const res = await (this.adminService.signin(mydto));
+        const res = await this.adminService.signin(mydto);
         if (res == true) {
+            session.adminId = mydto.id;
             session.email = mydto.email;
             console.log(session.email);
+            console.log(session.adminId);
             throw new exceptions_1.HttpException({ message: "Login Successful!" }, common_1.HttpStatus.ACCEPTED);
         }
         else {
@@ -86,7 +93,16 @@ __decorate([
     __metadata("design:returntype", Object)
 ], AdminController.prototype, "getAdmin", null);
 __decorate([
-    (0, common_1.Get)('/findAdmin/:id'),
+    (0, common_1.Get)('/profile'),
+    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
+    __param(0, (0, common_1.Session)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Object)
+], AdminController.prototype, "getProfile", null);
+__decorate([
+    (0, common_1.Get)('/:id'),
+    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
@@ -94,6 +110,7 @@ __decorate([
 ], AdminController.prototype, "getAdminByID", null);
 __decorate([
     (0, common_1.Post)('/addAdmin'),
+    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     (0, common_1.UsePipes)(new common_1.ValidationPipe()),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -112,6 +129,7 @@ __decorate([
 ], AdminController.prototype, "updateAdmin", null);
 __decorate([
     (0, common_1.Put)('/updateAdmin/:id'),
+    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     (0, common_1.UsePipes)(new common_1.ValidationPipe()),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Param)('id', common_1.ParseIntPipe)),
@@ -121,6 +139,7 @@ __decorate([
 ], AdminController.prototype, "updateAdminbyid", null);
 __decorate([
     (0, common_1.Delete)('/deleteadmin/:id'),
+    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
@@ -128,11 +147,12 @@ __decorate([
 ], AdminController.prototype, "deleteAdminbyId", null);
 __decorate([
     (0, common_1.Post)('/addManager'),
+    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     (0, common_1.UsePipes)(new common_1.ValidationPipe()),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [manager_dto_1.ManagerForm]),
-    __metadata("design:returntype", Object)
+    __metadata("design:paramtypes", [manager_dto_1.ManagerDto, admin_dto_1.AdminDto]),
+    __metadata("design:returntype", Promise)
 ], AdminController.prototype, "addManager", null);
 __decorate([
     (0, common_1.Get)('/managersbyAdmin/:id'),
@@ -143,6 +163,7 @@ __decorate([
 ], AdminController.prototype, "getManagerByAdminId", null);
 __decorate([
     (0, common_1.Get)('/adminbyManager/:id'),
+    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
@@ -167,6 +188,7 @@ __decorate([
 ], AdminController.prototype, "signin", null);
 __decorate([
     (0, common_1.Get)('/signout'),
+    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Session)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -174,6 +196,7 @@ __decorate([
 ], AdminController.prototype, "signout", null);
 __decorate([
     (0, common_1.Post)('/email'),
+    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

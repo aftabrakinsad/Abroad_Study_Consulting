@@ -1,4 +1,4 @@
-import { ManagerEntity } from 'src/manager/manager.entity';
+import { Manager } from 'src/entities/manager.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, Unique } from 'typeorm';
 
 @Entity("admin")
@@ -18,6 +18,6 @@ export class Admin {
   @Column()
   address: string;
   
-  @OneToMany(() => ManagerEntity, (manager) => manager.admins)
-  managers: ManagerEntity[];
+  @OneToMany(() => Manager, (manager) => manager.admin)
+  managers: Manager[];
 }

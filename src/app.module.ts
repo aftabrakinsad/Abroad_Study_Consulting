@@ -7,7 +7,8 @@ import { join } from 'path';
 
 @Module({
   imports: [AdminModule, ManagerModule, TypeOrmModule.forRoot(
-   { type: 'postgres',
+   { 
+    type: 'postgres',
     host: 'localhost',
     port: 5432,
     username: 'postgres',
@@ -15,8 +16,7 @@ import { join } from 'path';
     database: 'APWTDB',
     autoLoadEntities: true,
     synchronize: true,
-  }
-  ),
+  }),
   ServeStaticModule.forRoot({
     rootPath: join(__dirname, '..', '../public'), // added ../ to get one folder back
     serveRoot: '/public/' //last slash was important

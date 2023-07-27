@@ -11,10 +11,10 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const admin_controller_1 = require("./admin.controller");
 const admin_service_1 = require("./admin.service");
-const admin_entity_1 = require("./admin.entity");
+const admin_entity_1 = require("../entities/admin.entity");
 const manager_service_1 = require("../manager/manager.service");
-const manager_entity_1 = require("../manager/manager.entity");
 const mailer_1 = require("@nestjs-modules/mailer");
+const manager_entity_1 = require("../entities/manager.entity");
 let AdminModule = class AdminModule {
 };
 AdminModule = __decorate([
@@ -32,7 +32,7 @@ AdminModule = __decorate([
                     },
                 }
             }),
-            typeorm_1.TypeOrmModule.forFeature([admin_entity_1.Admin, manager_entity_1.ManagerEntity]),
+            typeorm_1.TypeOrmModule.forFeature([admin_entity_1.Admin, manager_entity_1.Manager]),
         ],
         controllers: [admin_controller_1.AdminController],
         providers: [admin_service_1.AdminService, manager_service_1.ManagerService],

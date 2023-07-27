@@ -1,4 +1,4 @@
-import { Manager } from 'src/manager/manager.entity';
+import { Manager } from 'src/entities/manager.entity';
 export declare class Admin {
     id: number;
     username: string;

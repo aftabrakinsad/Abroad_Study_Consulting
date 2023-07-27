@@ -2,10 +2,10 @@ import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AdminController } from "./admin.controller"
 import { AdminService } from "./admin.service"
-import { Admin } from "./admin.entity"
+import { Admin } from "../entities/admin.entity"
 import { ManagerService } from "src/manager/manager.service";
-import { ManagerEntity } from "src/manager/manager.entity";
 import { MailerModule } from "@nestjs-modules/mailer";
+import { Manager } from "src/entities/manager.entity";
 
 @Module({
 imports: [
@@ -22,7 +22,7 @@ imports: [
         }
     }),
       
-    TypeOrmModule.forFeature([Admin, ManagerEntity]),
+    TypeOrmModule.forFeature([Admin, Manager]),
 ],
     controllers: [AdminController],
     providers: [AdminService, ManagerService],
