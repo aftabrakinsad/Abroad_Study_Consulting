@@ -1,15 +1,15 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { Body, HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AdminEntity } from "./adminentity.entity";
-import { AdminFormUpdate } from "./adminformupdate.dto";
+import { Admin } from "./admin.entity";
+import { AdminUpdateDto } from "./admin-update.dto";
 import * as bcrypt from 'bcrypt';
 import { MailerService } from "@nestjs-modules/mailer/dist";
 @Injectable()
 export class AdminService {
     constructor(
-        @InjectRepository(AdminEntity)
-        private adminRepo: Repository<AdminEntity>,
+        @InjectRepository(Admin)
+        private adminRepo: Repository<Admin>,
         private mailerService: MailerService  
     ) {}
 
@@ -42,7 +42,7 @@ export class AdminService {
     return this.adminRepo.update({ email:email },{ name:name });
     }
 
-    updateAdminbyId(mydto: AdminFormUpdate, id): any
+    updateAdminbyId(mydto: AdminUpdateDto, id): any
     {
         return this.adminRepo.update(id, mydto);
     }
@@ -62,13 +62,56 @@ export class AdminService {
         });
     }
         
+    // async signup(mydto)
+    // {
+    //     const salt = await bcrypt.genSalt();
+    //     const hassedpassed = await bcrypt.hash(mydto.password, salt);
+    //     mydto.password = hassedpassed;
+    //     if(true)
+    //     {
+    //         if(mydto.name === '')
+    //         {
+    //             throw new HttpException({ message: "Please provide the username" }, HttpStatus.BAD_REQUEST);
+    //         }
+    //         else if(mydto.address === '')
+    //         {
+    //             throw new HttpException({ message: "Please provide the address" }, HttpStatus.BAD_REQUEST);
+    //         }
+    //         else if(mydto.name === Body.name)
+    //         {
+    //             console.log(Body.name);
+    //             throw new HttpException({ message: "Username already exists" }, HttpStatus.BAD_REQUEST);
+    //         }
+    //         else
+    //         {
+    //             await this.adminRepo.save(mydto)
+    //             throw new HttpException('Registration Successfull', HttpStatus.OK);
+    //         }
+    //     }
+    // }
+
     async signup(mydto)
     {
         const salt = await bcrypt.genSalt();
-        const hassedpassed = await bcrypt.hash(mydto.password, salt);
-        mydto.password = hassedpassed;
-        return this.adminRepo.save(mydto);
+        const hashedPassword = await bcrypt.hash(mydto.password, salt);
+        mydto.password = hashedPassword;
+
+        const existingUser = await this.adminRepo.findOne({ where: { name: mydto.name } });
+
+        if (existingUser) {
+            throw new HttpException({ message: "Username already exists" }, HttpStatus.BAD_REQUEST);
+        }
+
+        if (mydto.name === '') {
+            throw new HttpException({ message: "Please provide the username" }, HttpStatus.BAD_REQUEST);
+        } else if (mydto.address === '') {
+            throw new HttpException({ message: "Please provide the address" }, HttpStatus.BAD_REQUEST);
+        } else {
+            await this.adminRepo.save(mydto);
+            throw new HttpException('Registration Successful', HttpStatus.OK);
+        }
     }
+
 
     async signin(mydto)
     {

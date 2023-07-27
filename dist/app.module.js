@@ -9,7 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const adminmodule_module_1 = require("./admin/adminmodule.module");
+const admin_module_1 = require("./admin/admin.module");
 const manager_module_1 = require("./manager/manager.module");
 const serve_static_1 = require("@nestjs/serve-static");
 const path_1 = require("path");
@@ -17,7 +17,7 @@ let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [adminmodule_module_1.AdminModule, manager_module_1.ManagerModule, typeorm_1.TypeOrmModule.forRoot({ type: 'postgres',
+        imports: [admin_module_1.AdminModule, manager_module_1.ManagerModule, typeorm_1.TypeOrmModule.forRoot({ type: 'postgres',
                 host: 'localhost',
                 port: 5432,
                 username: 'postgres',

@@ -21,14 +21,14 @@ let ManagerService = class ManagerService {
     constructor(managerRepo) {
         this.managerRepo = managerRepo;
     }
-    insertManager(mydto) {
+    addManager(mydto) {
         return this.managerRepo.save(mydto);
     }
     getAdminByManagerID(id) {
         return this.managerRepo.find({
             where: { id: id },
             relations: {
-                admin: true,
+                admins: true,
             },
         });
     }

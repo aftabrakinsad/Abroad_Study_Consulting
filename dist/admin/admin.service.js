@@ -16,7 +16,7 @@ exports.AdminService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
-const adminentity_entity_1 = require("./adminentity.entity");
+const admin_entity_1 = require("./admin.entity");
 const bcrypt = require("bcrypt");
 const dist_1 = require("@nestjs-modules/mailer/dist");
 let AdminService = class AdminService {
@@ -61,9 +61,22 @@ let AdminService = class AdminService {
     }
     async signup(mydto) {
         const salt = await bcrypt.genSalt();
-        const hassedpassed = await bcrypt.hash(mydto.password, salt);
-        mydto.password = hassedpassed;
-        return this.adminRepo.save(mydto);
+        const hashedPassword = await bcrypt.hash(mydto.password, salt);
+        mydto.password = hashedPassword;
+        const existingUser = await this.adminRepo.findOne({ where: { name: mydto.name } });
+        if (existingUser) {
+            throw new common_1.HttpException({ message: "Username already exists" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        if (mydto.name === '') {
+            throw new common_1.HttpException({ message: "Please provide the username" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.address === '') {
+            throw new common_1.HttpException({ message: "Please provide the address" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else {
+            await this.adminRepo.save(mydto);
+            throw new common_1.HttpException('Registration Successful', common_1.HttpStatus.OK);
+        }
     }
     async signin(mydto) {
         if (mydto.email != null && mydto.password != null) {
@@ -90,9 +103,9 @@ let AdminService = class AdminService {
 };
 AdminService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(adminentity_entity_1.AdminEntity)),
+    __param(0, (0, typeorm_1.InjectRepository)(admin_entity_1.Admin)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         dist_1.MailerService])
 ], AdminService);
 exports.AdminService = AdminService;
-//# sourceMappingURL=adminservice.service.js.map
+//# sourceMappingURL=admin.service.js.map

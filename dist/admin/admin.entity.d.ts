@@ -1,5 +1,5 @@
 import { ManagerEntity } from 'src/manager/manager.entity';
-export declare class AdminEntity {
+export declare class Admin {
     id: number;
     name: string;
     email: string;

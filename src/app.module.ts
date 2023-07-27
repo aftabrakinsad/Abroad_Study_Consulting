@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AdminModule } from './admin/adminmodule.module';
+import { AdminModule } from './admin/admin.module';
 import { ManagerModule } from './manager/manager.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';

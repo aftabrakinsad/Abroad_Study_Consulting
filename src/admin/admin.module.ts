@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AdminController } from "./admin.controller"
-import { AdminService } from "./adminservice.service"
-import { AdminEntity } from "./adminentity.entity"
+import { AdminService } from "./admin.service"
+import { Admin } from "./admin.entity"
 import { ManagerService } from "src/manager/manager.service";
 import { ManagerEntity } from "src/manager/manager.entity";
 import { MailerModule } from "@nestjs-modules/mailer";
@@ -22,7 +22,7 @@ imports: [
         }
     }),
       
-    TypeOrmModule.forFeature([AdminEntity, ManagerEntity]),
+    TypeOrmModule.forFeature([Admin, ManagerEntity]),
 ],
     controllers: [AdminController],
     providers: [AdminService, ManagerService],

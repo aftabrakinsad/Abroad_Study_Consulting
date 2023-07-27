@@ -15,12 +15,12 @@ import {
 import { UnauthorizedException } from '@nestjs/common/exceptions';
 import { ManagerForm } from 'src/manager/manager.dto';
 import { ManagerService } from 'src/manager/manager.service';
-import { AdminForm } from './adminform.dto';
-import { AdminFormUpdate } from './adminformupdate.dto';
-import { AdminService } from './adminservice.service';
+import { AdminUpdateDto } from './admin-update.dto';
+import { AdminService } from './admin.service';
 import { SessionGuard } from './session.guard';
+import { Admin } from './admin.dto';
 
-@Controller('/admin')
+@Controller('admin')
 export class AdminController {
   constructor(
     private adminService: AdminService,
@@ -38,7 +38,8 @@ export class AdminController {
   }
 
   @Post('/addAdmin')
-  insertAdmin(@Body() mydto: AdminForm)
+  @UsePipes(new ValidationPipe())
+  addAdmin(@Body() mydto: Admin)
   {
     // console.log(mydto)
     return this.adminService.addAdmin(mydto);
@@ -54,7 +55,7 @@ export class AdminController {
 
   @Put('/updateAdmin/:id')
   @UsePipes(new ValidationPipe())
-  updateAdminbyid(@Body() mydto: AdminFormUpdate, @Param('id', ParseIntPipe) id: number): any {
+  updateAdminbyid(@Body() mydto: AdminUpdateDto, @Param('id', ParseIntPipe) id: number): any {
     return this.adminService.updateAdminbyId(mydto, id);
   }
 
@@ -66,7 +67,7 @@ export class AdminController {
   @Post('/addManager')
   @UsePipes(new ValidationPipe())
   addManager(@Body() managerdto: ManagerForm): any {
-      return this.managerService.insertManager(managerdto);
+      return this.managerService.addManager(managerdto);
   }
    
   @Get('/managersbyAdmin/:id')
@@ -81,14 +82,14 @@ export class AdminController {
    
   @Post('/signup')
   @UsePipes(new ValidationPipe())
-  signup(@Body() mydto: AdminForm){
-  // console.log(mydto)
+  signup(@Body() mydto: Admin) {
+    // console.log(mydto)
     return this.adminService.signup(mydto);
   }
 
   @Post('/signin')
   @UsePipes(new ValidationPipe())
-  async signin(@Session() session, @Body() mydto: AdminForm)
+  async signin(@Session() session, @Body() mydto: Admin)
   {
     const res = await (this.adminService.signin(mydto));
     if(res == true)

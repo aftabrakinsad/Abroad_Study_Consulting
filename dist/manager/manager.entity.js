@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ManagerEntity = void 0;
-const adminentity_entity_1 = require("../admin/adminentity.entity");
+const admin_entity_1 = require("../admin/admin.entity");
 const typeorm_1 = require("typeorm");
 let ManagerEntity = class ManagerEntity {
 };
@@ -35,9 +35,9 @@ __decorate([
     __metadata("design:type", String)
 ], ManagerEntity.prototype, "address", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => adminentity_entity_1.AdminEntity, (admin) => admin.managers),
-    __metadata("design:type", adminentity_entity_1.AdminEntity)
-], ManagerEntity.prototype, "admin", void 0);
+    (0, typeorm_1.ManyToOne)(() => admin_entity_1.Admin, (admin) => admin.managers),
+    __metadata("design:type", admin_entity_1.Admin)
+], ManagerEntity.prototype, "admins", void 0);
 ManagerEntity = __decorate([
     (0, typeorm_1.Entity)("manager")
 ], ManagerEntity);

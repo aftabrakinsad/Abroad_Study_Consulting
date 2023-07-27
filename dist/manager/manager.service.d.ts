@@ -4,6 +4,6 @@ import { ManagerEntity } from "./manager.entity";
 export declare class ManagerService {
     private managerRepo;
     constructor(managerRepo: Repository<ManagerEntity>);
-    insertManager(mydto: ManagerForm): any;
+    addManager(mydto: ManagerForm): any;
     getAdminByManagerID(id: any): any;
 }

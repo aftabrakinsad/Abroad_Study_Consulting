@@ -1,9 +1,9 @@
-import { AdminEntity } from 'src/admin/adminentity.entity';
+import { Admin } from 'src/admin/admin.entity';
 export declare class ManagerEntity {
     id: number;
     name: string;
     email: string;
     password: string;
     address: string;
-    admin: AdminEntity;
+    admins: Admin;
 }

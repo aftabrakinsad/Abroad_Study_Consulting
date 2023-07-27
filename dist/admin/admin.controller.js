@@ -17,10 +17,10 @@ const common_1 = require("@nestjs/common");
 const exceptions_1 = require("@nestjs/common/exceptions");
 const manager_dto_1 = require("../manager/manager.dto");
 const manager_service_1 = require("../manager/manager.service");
-const adminform_dto_1 = require("./adminform.dto");
-const adminformupdate_dto_1 = require("./adminformupdate.dto");
-const adminservice_service_1 = require("./adminservice.service");
+const admin_update_dto_1 = require("./admin-update.dto");
+const admin_service_1 = require("./admin.service");
 const session_guard_1 = require("./session.guard");
+const admin_dto_1 = require("./admin.dto");
 let AdminController = class AdminController {
     constructor(adminService, managerService) {
         this.adminService = adminService;
@@ -32,7 +32,7 @@ let AdminController = class AdminController {
     getAdminByID(id) {
         return this.adminService.getAdminById(id);
     }
-    insertAdmin(mydto) {
+    addAdmin(mydto) {
         return this.adminService.addAdmin(mydto);
     }
     updateAdmin(session, name) {
@@ -45,7 +45,7 @@ let AdminController = class AdminController {
         return this.adminService.deleteAdminbyId(id);
     }
     addManager(managerdto) {
-        return this.managerService.insertManager(managerdto);
+        return this.managerService.addManager(managerdto);
     }
     getManagerByAdminId(id) {
         return this.adminService.ManagersByAdminId(id);
@@ -93,11 +93,12 @@ __decorate([
 ], AdminController.prototype, "getAdminByID", null);
 __decorate([
     (0, common_1.Post)('/addAdmin'),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe()),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [adminform_dto_1.AdminForm]),
+    __metadata("design:paramtypes", [admin_dto_1.Admin]),
     __metadata("design:returntype", void 0)
-], AdminController.prototype, "insertAdmin", null);
+], AdminController.prototype, "addAdmin", null);
 __decorate([
     (0, common_1.Put)('/updateAdmin/'),
     (0, common_1.UseGuards)(session_guard_1.SessionGuard),
@@ -114,7 +115,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [adminformupdate_dto_1.AdminFormUpdate, Number]),
+    __metadata("design:paramtypes", [admin_update_dto_1.AdminUpdateDto, Number]),
     __metadata("design:returntype", Object)
 ], AdminController.prototype, "updateAdminbyid", null);
 __decorate([
@@ -151,7 +152,7 @@ __decorate([
     (0, common_1.UsePipes)(new common_1.ValidationPipe()),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [adminform_dto_1.AdminForm]),
+    __metadata("design:paramtypes", [admin_dto_1.Admin]),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "signup", null);
 __decorate([
@@ -160,7 +161,7 @@ __decorate([
     __param(0, (0, common_1.Session)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, adminform_dto_1.AdminForm]),
+    __metadata("design:paramtypes", [Object, admin_dto_1.Admin]),
     __metadata("design:returntype", Promise)
 ], AdminController.prototype, "signin", null);
 __decorate([
@@ -178,8 +179,8 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "sendEmail", null);
 AdminController = __decorate([
-    (0, common_1.Controller)('/admin'),
-    __metadata("design:paramtypes", [adminservice_service_1.AdminService,
+    (0, common_1.Controller)('admin'),
+    __metadata("design:paramtypes", [admin_service_1.AdminService,
         manager_service_1.ManagerService])
 ], AdminController);
 exports.AdminController = AdminController;

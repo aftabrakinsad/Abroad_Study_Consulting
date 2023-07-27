@@ -10,8 +10,8 @@ exports.AdminModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const admin_controller_1 = require("./admin.controller");
-const adminservice_service_1 = require("./adminservice.service");
-const adminentity_entity_1 = require("./adminentity.entity");
+const admin_service_1 = require("./admin.service");
+const admin_entity_1 = require("./admin.entity");
 const manager_service_1 = require("../manager/manager.service");
 const manager_entity_1 = require("../manager/manager.entity");
 const mailer_1 = require("@nestjs-modules/mailer");
@@ -32,11 +32,11 @@ AdminModule = __decorate([
                     },
                 }
             }),
-            typeorm_1.TypeOrmModule.forFeature([adminentity_entity_1.AdminEntity, manager_entity_1.ManagerEntity]),
+            typeorm_1.TypeOrmModule.forFeature([admin_entity_1.Admin, manager_entity_1.ManagerEntity]),
         ],
         controllers: [admin_controller_1.AdminController],
-        providers: [adminservice_service_1.AdminService, manager_service_1.ManagerService],
+        providers: [admin_service_1.AdminService, manager_service_1.ManagerService],
     })
 ], AdminModule);
 exports.AdminModule = AdminModule;
-//# sourceMappingURL=adminmodule.module.js.map
+//# sourceMappingURL=admin.module.js.map
