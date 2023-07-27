@@ -42,8 +42,8 @@ let AdminService = class AdminService {
         mydto.password = hassedpassed;
         return this.adminRepo.save(mydto);
     }
-    updateAdmin(name, email) {
-        return this.adminRepo.update({ email: email }, { name: name });
+    updateAdmin(username, email) {
+        return this.adminRepo.update({ email: email }, { username: username });
     }
     updateAdminbyId(mydto, id) {
         return this.adminRepo.update(id, mydto);
@@ -63,9 +63,9 @@ let AdminService = class AdminService {
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(mydto.password, salt);
         mydto.password = hashedPassword;
-        const existingAdmin = await this.adminRepo.findOne({ where: { name: mydto.name } });
+        const existingAdmin = await this.adminRepo.findOne({ where: { username: mydto.username } });
         const existingAdminEmail = await this.adminRepo.findOne({ where: { email: mydto.email } });
-        if (mydto.name === '') {
+        if (mydto.username === '') {
             throw new common_1.HttpException({ message: "Please provide the username" }, common_1.HttpStatus.BAD_REQUEST);
         }
         else if (mydto.address === '') {
@@ -85,6 +85,9 @@ let AdminService = class AdminService {
     async signin(mydto) {
         if (mydto.email != null && mydto.password != null) {
             const mydata = await this.adminRepo.findOneBy({ email: mydto.email });
+            if (!mydata) {
+                throw new common_1.UnauthorizedException({ message: "Email didn't match" });
+            }
             const isMatch = await bcrypt.compare(mydto.password, mydata.password);
             if (isMatch) {
                 return true;
@@ -94,7 +97,7 @@ let AdminService = class AdminService {
             }
         }
         else {
-            return false;
+            throw new common_1.UnauthorizedException({ message: "invalid credentials" });
         }
     }
     async Email(mydata) {

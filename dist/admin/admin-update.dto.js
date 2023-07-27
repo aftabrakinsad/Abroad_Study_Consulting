@@ -16,6 +16,6 @@ class AdminUpdateDto {
 __decorate([
     (0, class_validator_1.Length)(3, 8),
     __metadata("design:type", String)
-], AdminUpdateDto.prototype, "name", void 0);
+], AdminUpdateDto.prototype, "username", void 0);
 exports.AdminUpdateDto = AdminUpdateDto;
 //# sourceMappingURL=admin-update.dto.js.map

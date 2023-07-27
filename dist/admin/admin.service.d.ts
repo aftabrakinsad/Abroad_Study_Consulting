@@ -9,7 +9,7 @@ export declare class AdminService {
     getIndex(): any;
     getAdminById(id: any): Promise<Admin>;
     addAdmin(mydto: any): Promise<any>;
-    updateAdmin(name: any, email: any): any;
+    updateAdmin(username: any, email: any): any;
     updateAdminbyId(mydto: AdminUpdateDto, id: any): any;
     deleteAdminbyId(id: any): any;
     ManagersByAdminId(id: any): any;

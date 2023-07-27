@@ -11,14 +11,15 @@ import {
   ValidationPipe,
   Session,
   UseGuards,
+  HttpStatus,
 } from '@nestjs/common';
-import { UnauthorizedException } from '@nestjs/common/exceptions';
+import { HttpException, UnauthorizedException } from '@nestjs/common/exceptions';
 import { ManagerForm } from 'src/manager/manager.dto';
 import { ManagerService } from 'src/manager/manager.service';
 import { AdminUpdateDto } from './admin-update.dto';
 import { AdminService } from './admin.service';
 import { SessionGuard } from './session.guard';
-import { Admin } from './admin.dto';
+import { AdminDto } from './admin.dto';
 
 @Controller('admin')
 export class AdminController {
@@ -39,7 +40,7 @@ export class AdminController {
 
   @Post('/addAdmin')
   @UsePipes(new ValidationPipe())
-  addAdmin(@Body() mydto: Admin)
+  addAdmin(@Body() mydto: AdminDto)
   {
     // console.log(mydto)
     return this.adminService.addAdmin(mydto);
@@ -82,20 +83,21 @@ export class AdminController {
    
   @Post('/signup')
   @UsePipes(new ValidationPipe())
-  signup(@Body() mydto: Admin) {
+  async signup(@Body() mydto: AdminDto): Promise<any> {
     // console.log(mydto)
     return this.adminService.signup(mydto);
   }
 
   @Post('/signin')
   @UsePipes(new ValidationPipe())
-  async signin(@Session() session, @Body() mydto: Admin)
+  async signin(@Session() session, @Body() mydto: AdminDto)
   {
     const res = await (this.adminService.signin(mydto));
     if(res == true)
     {
       session.email = mydto.email;
-      return (session.email);
+      console.log(session.email);
+      throw new HttpException({ message: "Login Successful!" }, HttpStatus.ACCEPTED);
     }
     else
     {

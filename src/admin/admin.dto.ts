@@ -1,7 +1,7 @@
-import { IsNotEmpty, IsInt, Length, IsEmail, Matches } from "class-validator";
+import { IsNotEmpty, Length, IsEmail, Matches } from "class-validator";
 
-export class Admin {   
-    name: string;
+export class AdminDto {   
+    username: string;
    
     @IsEmail() 
     @IsNotEmpty()

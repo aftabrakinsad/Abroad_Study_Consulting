@@ -1,4 +1,4 @@
-import { Body, HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable, UnauthorizedException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Admin } from "./admin.entity";
@@ -37,9 +37,9 @@ export class AdminService {
         return this.adminRepo.save(mydto);
     }
 
-    updateAdmin(name, email): any
+    updateAdmin(username, email): any
     {
-    return this.adminRepo.update({ email:email },{ name:name });
+    return this.adminRepo.update({ email:email },{ username:username });
     }
 
     updateAdminbyId(mydto: AdminUpdateDto, id): any
@@ -68,10 +68,10 @@ export class AdminService {
         const hashedPassword = await bcrypt.hash(mydto.password, salt);
         mydto.password = hashedPassword;
 
-        const existingAdmin = await this.adminRepo.findOne({ where: { name: mydto.name } });
+        const existingAdmin = await this.adminRepo.findOne({ where: { username: mydto.username } });
         const existingAdminEmail = await this.adminRepo.findOne({ where: { email: mydto.email } });
 
-        if (mydto.name === '')
+        if (mydto.username === '')
         {
             throw new HttpException({ message: "Please provide the username" }, HttpStatus.BAD_REQUEST);
         } 
@@ -94,12 +94,15 @@ export class AdminService {
         }
     }
 
-
     async signin(mydto)
     {
         if (mydto.email != null && mydto.password != null)
         {
             const mydata = await this.adminRepo.findOneBy({ email: mydto.email });
+            if (!mydata)
+            {
+                throw new UnauthorizedException({ message: "Email didn't match" });
+            }
             const isMatch = await bcrypt.compare(mydto.password, mydata.password);
             if (isMatch)
             {
@@ -109,10 +112,10 @@ export class AdminService {
             {
                 return false;
             }
-        } 
+        }
         else
         {
-            return false;
+            throw new UnauthorizedException({ message: "invalid credentials" });
         }
     }
 

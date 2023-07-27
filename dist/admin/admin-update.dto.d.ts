@@ -1,3 +1,3 @@
 export declare class AdminUpdateDto {
-    name: string;
+    username: string;
 }

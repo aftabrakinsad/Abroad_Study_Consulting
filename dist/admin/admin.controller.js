@@ -53,14 +53,15 @@ let AdminController = class AdminController {
     getAdminByManagerId(id) {
         return this.managerService.getAdminByManagerID(id);
     }
-    signup(mydto) {
+    async signup(mydto) {
         return this.adminService.signup(mydto);
     }
     async signin(session, mydto) {
         const res = await (this.adminService.signin(mydto));
         if (res == true) {
             session.email = mydto.email;
-            return (session.email);
+            console.log(session.email);
+            throw new exceptions_1.HttpException({ message: "Login Successful!" }, common_1.HttpStatus.ACCEPTED);
         }
         else {
             throw new exceptions_1.UnauthorizedException({ message: "invalid credentials" });
@@ -96,7 +97,7 @@ __decorate([
     (0, common_1.UsePipes)(new common_1.ValidationPipe()),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [admin_dto_1.Admin]),
+    __metadata("design:paramtypes", [admin_dto_1.AdminDto]),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "addAdmin", null);
 __decorate([
@@ -152,8 +153,8 @@ __decorate([
     (0, common_1.UsePipes)(new common_1.ValidationPipe()),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [admin_dto_1.Admin]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [admin_dto_1.AdminDto]),
+    __metadata("design:returntype", Promise)
 ], AdminController.prototype, "signup", null);
 __decorate([
     (0, common_1.Post)('/signin'),
@@ -161,7 +162,7 @@ __decorate([
     __param(0, (0, common_1.Session)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, admin_dto_1.Admin]),
+    __metadata("design:paramtypes", [Object, admin_dto_1.AdminDto]),
     __metadata("design:returntype", Promise)
 ], AdminController.prototype, "signin", null);
 __decorate([

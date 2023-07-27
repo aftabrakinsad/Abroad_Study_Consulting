@@ -9,20 +9,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AdminDto = void 0;
-const class_validator_1 = require("class-validator");
-class AdminDto {
-}
+exports.Admin = void 0;
+const typeorm_1 = require("typeorm");
+let Admin = class Admin {
+};
 __decorate([
-    (0, class_validator_1.IsEmail)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], AdminDto.prototype, "email", void 0);
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    __metadata("design:type", Number)
+], Admin.prototype, "id", void 0);
 __decorate([
-    (0, class_validator_1.Length)(3, 20, { message: 'password must be longer than 3 and shorter than 20' }),
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.Matches)(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/, { message: 'password too weak' }),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], AdminDto.prototype, "password", void 0);
-exports.AdminDto = AdminDto;
-//# sourceMappingURL=admin.dto.js.map
+], Admin.prototype, "username", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], Admin.prototype, "email", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], Admin.prototype, "password", void 0);
+Admin = __decorate([
+    (0, typeorm_1.Entity)("admin")
+], Admin);
+exports.Admin = Admin;
+//# sourceMappingURL=auth.entity.js.map
