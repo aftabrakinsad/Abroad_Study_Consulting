@@ -6,6 +6,8 @@ import { Admin } from "../entities/admin.entity"
 import { ManagerService } from "src/manager/manager.service";
 import { MailerModule } from "@nestjs-modules/mailer";
 import { Manager } from "src/entities/manager.entity";
+import { ConsultantService } from "src/consultant/consultant.service";
+import { Consultant } from "src/entities/consultant.entity";
 
 @Module({
 imports: [
@@ -17,15 +19,15 @@ imports: [
             secure: true,
             auth: {
                 user: 'rakinsadaftab@gmail.com',
-                pass: ''
+                pass: '',
             },
         }
     }),
       
-    TypeOrmModule.forFeature([Admin, Manager]),
+    TypeOrmModule.forFeature([Admin, Manager, Consultant]),
 ],
     controllers: [AdminController],
-    providers: [AdminService, ManagerService],
+    providers: [AdminService, ManagerService, ConsultantService],
 })
 
 export class AdminModule {}

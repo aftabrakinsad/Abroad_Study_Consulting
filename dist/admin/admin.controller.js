@@ -16,15 +16,20 @@ exports.AdminController = void 0;
 const common_1 = require("@nestjs/common");
 const exceptions_1 = require("@nestjs/common/exceptions");
 const manager_service_1 = require("../manager/manager.service");
-const admin_update_dto_1 = require("./admin-update.dto");
+const admin_update_dto_1 = require("../dtos/admin-update.dto");
 const admin_service_1 = require("./admin.service");
-const session_guard_1 = require("./session.guard");
 const admin_dto_1 = require("../dtos/admin.dto");
 const manager_dto_1 = require("../dtos/manager.dto");
+const session_guard_1 = require("../session.guard");
+const Consultant_dto_1 = require("../dtos/Consultant.dto");
+const consultant_service_1 = require("../consultant/consultant.service");
+const manager_update_dto_1 = require("../dtos/manager-update.dto");
+const consultant_update_dtp_1 = require("../dtos/consultant-update.dtp");
 let AdminController = class AdminController {
-    constructor(adminService, managerService) {
+    constructor(adminService, managerService, consultantService) {
         this.adminService = adminService;
         this.managerService = managerService;
+        this.consultantService = consultantService;
     }
     getAdmin() {
         return this.adminService.getIndex();
@@ -41,16 +46,37 @@ let AdminController = class AdminController {
     updateAdmin(session, name) {
         return this.adminService.updateAdmin(name, session.email);
     }
+    updateManager(session, name) {
+        return this.managerService.updateManager(name, session.email);
+    }
+    updateConsultant(session, name) {
+        return this.consultantService.updateConsultant(name, session.email);
+    }
     updateAdminbyid(mydto, id) {
         return this.adminService.updateAdminbyId(mydto, id);
     }
+    updateManagerbyid(mydto, id) {
+        return this.managerService.updateManagerbyId(mydto, id);
+    }
+    updateConsultantbyid(mydto, id) {
+        return this.consultantService.updateConsultantbyid(mydto, id);
+    }
     deleteAdminbyId(id) {
         return this.adminService.deleteAdminbyId(id);
+    }
+    deleteManagerId(id) {
+        return this.managerService.deleteManagerbyId(id);
+    }
+    deleteConsultantId(id) {
+        return this.consultantService.deleteConsultantId(id);
     }
     async addManager(managerDto, adminDto) {
         const adminId = adminDto.id;
         console.log(adminId);
         return this.managerService.addManager(managerDto, adminId);
+    }
+    async addConsultant(consultantDto, adminDto) {
+        return this.consultantService.addConsultant(consultantDto);
     }
     getManagerByAdminId(id) {
         return this.adminService.ManagersByAdminId(id);
@@ -128,6 +154,26 @@ __decorate([
     __metadata("design:returntype", Object)
 ], AdminController.prototype, "updateAdmin", null);
 __decorate([
+    (0, common_1.Put)('/updateManager/'),
+    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe()),
+    __param(0, (0, common_1.Session)()),
+    __param(1, (0, common_1.Body)('name')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Object)
+], AdminController.prototype, "updateManager", null);
+__decorate([
+    (0, common_1.Put)('/updateConsultant/'),
+    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe()),
+    __param(0, (0, common_1.Session)()),
+    __param(1, (0, common_1.Body)('name')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Object)
+], AdminController.prototype, "updateConsultant", null);
+__decorate([
     (0, common_1.Put)('/updateAdmin/:id'),
     (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     (0, common_1.UsePipes)(new common_1.ValidationPipe()),
@@ -138,13 +184,49 @@ __decorate([
     __metadata("design:returntype", Object)
 ], AdminController.prototype, "updateAdminbyid", null);
 __decorate([
-    (0, common_1.Delete)('/deleteadmin/:id'),
+    (0, common_1.Put)('/updateManager/:id'),
+    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe()),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [manager_update_dto_1.ManagerUpdateDto, Number]),
+    __metadata("design:returntype", Object)
+], AdminController.prototype, "updateManagerbyid", null);
+__decorate([
+    (0, common_1.Put)('/updateConsultant/:id'),
+    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe()),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [consultant_update_dtp_1.CounsultantUpdateDto, Number]),
+    __metadata("design:returntype", Object)
+], AdminController.prototype, "updateConsultantbyid", null);
+__decorate([
+    (0, common_1.Delete)('/deleteAdmin/:id'),
     (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Object)
 ], AdminController.prototype, "deleteAdminbyId", null);
+__decorate([
+    (0, common_1.Delete)('/deleteManager/:id'),
+    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Object)
+], AdminController.prototype, "deleteManagerId", null);
+__decorate([
+    (0, common_1.Delete)('/deleteConsultant/:id'),
+    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Object)
+], AdminController.prototype, "deleteConsultantId", null);
 __decorate([
     (0, common_1.Post)('/addManager'),
     (0, common_1.UseGuards)(session_guard_1.SessionGuard),
@@ -154,6 +236,15 @@ __decorate([
     __metadata("design:paramtypes", [manager_dto_1.ManagerDto, admin_dto_1.AdminDto]),
     __metadata("design:returntype", Promise)
 ], AdminController.prototype, "addManager", null);
+__decorate([
+    (0, common_1.Post)('/addConsultant'),
+    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe()),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Consultant_dto_1.ConsultantDto, admin_dto_1.AdminDto]),
+    __metadata("design:returntype", Promise)
+], AdminController.prototype, "addConsultant", null);
 __decorate([
     (0, common_1.Get)('/managersbyAdmin/:id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
@@ -205,7 +296,8 @@ __decorate([
 AdminController = __decorate([
     (0, common_1.Controller)('admin'),
     __metadata("design:paramtypes", [admin_service_1.AdminService,
-        manager_service_1.ManagerService])
+        manager_service_1.ManagerService,
+        consultant_service_1.ConsultantService])
 ], AdminController);
 exports.AdminController = AdminController;
 //# sourceMappingURL=admin.controller.js.map

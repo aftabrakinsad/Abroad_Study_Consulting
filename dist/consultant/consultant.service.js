@@ -23,21 +23,20 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ManagerService = void 0;
+exports.ConsultantService = void 0;
+const dist_1 = require("@nestjs-modules/mailer/dist");
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
+const consultant_entity_1 = require("../entities/consultant.entity");
 const typeorm_2 = require("typeorm");
-const manager_entity_1 = require("../entities/manager.entity");
-const admin_entity_1 = require("../entities/admin.entity");
-const dist_1 = require("@nestjs-modules/mailer/dist");
 const bcrypt = require("bcrypt");
-let ManagerService = class ManagerService {
-    constructor(managerRepo, mailerService) {
-        this.managerRepo = managerRepo;
+let ConsultantService = class ConsultantService {
+    constructor(consultantRepo, mailerService) {
+        this.consultantRepo = consultantRepo;
         this.mailerService = mailerService;
     }
-    async manager_profie(email) {
-        const data = await this.managerRepo.findOne({ where: { email } });
+    async con_profie(email) {
+        const data = await this.consultantRepo.findOne({ where: { email } });
         if (data !== null) {
             const { id } = data, filteredData = __rest(data, ["id"]);
             return filteredData;
@@ -46,73 +45,40 @@ let ManagerService = class ManagerService {
             throw new common_1.HttpException('Not Found', common_1.HttpStatus.NOT_FOUND);
         }
     }
-    async addManager(managerDto, adminId) {
-        const newManager = new manager_entity_1.Manager();
-        newManager.name = managerDto.name;
-        newManager.email = managerDto.email;
-        newManager.password = managerDto.password;
-        newManager.address = managerDto.address;
-        const admin = new admin_entity_1.Admin();
-        admin.id = adminId;
-        newManager.admin = admin;
-        return this.managerRepo.save(newManager);
+    updateConsultant(name, email) {
+        return this.consultantRepo.update({ email: email }, { name: name });
     }
-    updateManager(name, email) {
-        return this.managerRepo.update({ email: email }, { name: name });
+    updateConsultantbyid(mydto, id) {
+        return this.consultantRepo.update(id, mydto);
     }
-    updateManagerbyId(mydto, id) {
-        return this.managerRepo.update(id, mydto);
+    deleteConsultantId(id) {
+        return this.consultantRepo.delete(id);
     }
-    deleteManagerbyId(id) {
-        return this.managerRepo.delete(id);
-    }
-    getAdminByManagerID(id) {
-        return this.managerRepo.find({
-            where: { id: id },
-            relations: {
-                admin: true,
-            },
-        });
+    addConsultant(consultantDto) {
+        this.consultantRepo.save(consultantDto);
+        return 'Consultant Added Successfully';
     }
     async signup(mydto) {
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(mydto.password, salt);
         mydto.password = hashedPassword;
-        const existingManager = await this.managerRepo.findOne({ where: { name: mydto.name } });
-        const existingManagerEmail = await this.managerRepo.findOne({ where: { email: mydto.email } });
+        const existingConsultant = await this.consultantRepo.findOne({ where: { name: mydto.name } });
+        const existingConsultantEmail = await this.consultantRepo.findOne({ where: { email: mydto.email } });
         if (mydto.name === '') {
             throw new common_1.HttpException({ message: "Please provide the username" }, common_1.HttpStatus.BAD_REQUEST);
         }
-        else if (mydto.address === '') {
-            throw new common_1.HttpException({ message: "Please provide the address" }, common_1.HttpStatus.BAD_REQUEST);
+        else if (mydto.country === '') {
+            throw new common_1.HttpException({ message: "Please provide the country" }, common_1.HttpStatus.BAD_REQUEST);
         }
-        else if (existingManager) {
+        else if (existingConsultant) {
             throw new common_1.HttpException({ message: "Username already exists" }, common_1.HttpStatus.BAD_REQUEST);
         }
-        else if (existingManagerEmail) {
+        else if (existingConsultantEmail) {
             throw new common_1.HttpException({ message: "Email already exists" }, common_1.HttpStatus.BAD_REQUEST);
         }
         else {
-            await this.managerRepo.save(mydto);
+            await this.consultantRepo.save(mydto);
             throw new common_1.HttpException('Registration Successful', common_1.HttpStatus.OK);
-        }
-    }
-    async signin(mydto) {
-        if (mydto.email != null && mydto.password != null) {
-            const mydata = await this.managerRepo.findOneBy({ email: mydto.email });
-            if (!mydata) {
-                throw new common_1.UnauthorizedException({ message: "Email didn't match" });
-            }
-            const isMatch = await bcrypt.compare(mydto.password, mydata.password);
-            if (isMatch) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-        else {
-            throw new common_1.UnauthorizedException({ message: "invalid credentials" });
         }
     }
     async Email(mydata) {
@@ -123,11 +89,11 @@ let ManagerService = class ManagerService {
         });
     }
 };
-ManagerService = __decorate([
+ConsultantService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(manager_entity_1.Manager)),
+    __param(0, (0, typeorm_1.InjectRepository)(consultant_entity_1.Consultant)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         dist_1.MailerService])
-], ManagerService);
-exports.ManagerService = ManagerService;
-//# sourceMappingURL=manager.service.js.map
+], ConsultantService);
+exports.ConsultantService = ConsultantService;
+//# sourceMappingURL=consultant.service.js.map

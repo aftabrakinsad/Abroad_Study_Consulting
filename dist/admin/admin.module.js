@@ -15,6 +15,8 @@ const admin_entity_1 = require("../entities/admin.entity");
 const manager_service_1 = require("../manager/manager.service");
 const mailer_1 = require("@nestjs-modules/mailer");
 const manager_entity_1 = require("../entities/manager.entity");
+const consultant_service_1 = require("../consultant/consultant.service");
+const consultant_entity_1 = require("../entities/consultant.entity");
 let AdminModule = class AdminModule {
 };
 AdminModule = __decorate([
@@ -28,14 +30,14 @@ AdminModule = __decorate([
                     secure: true,
                     auth: {
                         user: 'rakinsadaftab@gmail.com',
-                        pass: ''
+                        pass: '',
                     },
                 }
             }),
-            typeorm_1.TypeOrmModule.forFeature([admin_entity_1.Admin, manager_entity_1.Manager]),
+            typeorm_1.TypeOrmModule.forFeature([admin_entity_1.Admin, manager_entity_1.Manager, consultant_entity_1.Consultant]),
         ],
         controllers: [admin_controller_1.AdminController],
-        providers: [admin_service_1.AdminService, manager_service_1.ManagerService],
+        providers: [admin_service_1.AdminService, manager_service_1.ManagerService, consultant_service_1.ConsultantService],
     })
 ], AdminModule);
 exports.AdminModule = AdminModule;

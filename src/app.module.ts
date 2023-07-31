@@ -4,9 +4,11 @@ import { AdminModule } from './admin/admin.module';
 import { ManagerModule } from './manager/manager.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ConsultantController } from './consultant/consultant.controller';
+import { ConsultantModule } from './consultant/consultant.module';
 
 @Module({
-  imports: [AdminModule, ManagerModule, TypeOrmModule.forRoot(
+  imports: [AdminModule, ManagerModule, ConsultantModule,TypeOrmModule.forRoot(
    { 
     type: 'postgres',
     host: 'localhost',
@@ -21,6 +23,7 @@ import { join } from 'path';
     rootPath: join(__dirname, '..', '../public'), // added ../ to get one folder back
     serveRoot: '/public/' //last slash was important
   }),
+  ConsultantModule,
 ],
   controllers: [],
   providers: [],

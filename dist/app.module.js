@@ -13,11 +13,12 @@ const admin_module_1 = require("./admin/admin.module");
 const manager_module_1 = require("./manager/manager.module");
 const serve_static_1 = require("@nestjs/serve-static");
 const path_1 = require("path");
+const consultant_module_1 = require("./consultant/consultant.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [admin_module_1.AdminModule, manager_module_1.ManagerModule, typeorm_1.TypeOrmModule.forRoot({
+        imports: [admin_module_1.AdminModule, manager_module_1.ManagerModule, consultant_module_1.ConsultantModule, typeorm_1.TypeOrmModule.forRoot({
                 type: 'postgres',
                 host: 'localhost',
                 port: 5432,
@@ -31,6 +32,7 @@ AppModule = __decorate([
                 rootPath: (0, path_1.join)(__dirname, '..', '../public'),
                 serveRoot: '/public/'
             }),
+            consultant_module_1.ConsultantModule,
         ],
         controllers: [],
         providers: [],

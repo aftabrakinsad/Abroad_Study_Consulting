@@ -9,37 +9,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Manager = void 0;
-const admin_entity_1 = require("../entities/admin.entity");
-const typeorm_1 = require("typeorm");
-let Manager = class Manager {
-};
+exports.ConsultantDto = void 0;
+const class_validator_1 = require("class-validator");
+class ConsultantDto {
+}
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], Manager.prototype, "id", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], Manager.prototype, "name", void 0);
+], ConsultantDto.prototype, "name", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], Manager.prototype, "email", void 0);
+], ConsultantDto.prototype, "phone", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, class_validator_1.IsEmail)(),
     __metadata("design:type", String)
-], Manager.prototype, "password", void 0);
+], ConsultantDto.prototype, "email", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], Manager.prototype, "address", void 0);
-__decorate([
-    (0, typeorm_1.ManyToOne)(() => admin_entity_1.Admin, (admin) => admin.managers),
-    __metadata("design:type", admin_entity_1.Admin)
-], Manager.prototype, "admin", void 0);
-Manager = __decorate([
-    (0, typeorm_1.Entity)("manager")
-], Manager);
-exports.Manager = Manager;
-//# sourceMappingURL=manager.entity.js.map
+], ConsultantDto.prototype, "country", void 0);
+exports.ConsultantDto = ConsultantDto;
+//# sourceMappingURL=Consultant.dto.js.map

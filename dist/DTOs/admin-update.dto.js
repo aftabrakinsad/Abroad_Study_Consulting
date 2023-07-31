@@ -9,28 +9,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Admin = void 0;
-const typeorm_1 = require("typeorm");
-let Admin = class Admin {
-};
+exports.AdminUpdateDto = void 0;
+const class_validator_1 = require("class-validator");
+class AdminUpdateDto {
+}
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], Admin.prototype, "id", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
+    (0, class_validator_1.Length)(3, 5),
     __metadata("design:type", String)
-], Admin.prototype, "username", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Admin.prototype, "email", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Admin.prototype, "password", void 0);
-Admin = __decorate([
-    (0, typeorm_1.Entity)("admin")
-], Admin);
-exports.Admin = Admin;
-//# sourceMappingURL=auth.entity.js.map
+], AdminUpdateDto.prototype, "username", void 0);
+exports.AdminUpdateDto = AdminUpdateDto;
+//# sourceMappingURL=admin-update.dto.js.map

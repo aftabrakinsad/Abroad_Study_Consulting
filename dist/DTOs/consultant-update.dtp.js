@@ -9,20 +9,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AdminDto = void 0;
+exports.CounsultantUpdateDto = void 0;
 const class_validator_1 = require("class-validator");
-class AdminDto {
+class CounsultantUpdateDto {
 }
 __decorate([
-    (0, class_validator_1.IsEmail)(),
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.Length)(3, 5),
     __metadata("design:type", String)
-], AdminDto.prototype, "email", void 0);
-__decorate([
-    (0, class_validator_1.Length)(3, 20, { message: 'password must be longer than 3 and shorter than 20' }),
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.Matches)(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/, { message: 'password too weak' }),
-    __metadata("design:type", String)
-], AdminDto.prototype, "password", void 0);
-exports.AdminDto = AdminDto;
-//# sourceMappingURL=admin.dto.js.map
+], CounsultantUpdateDto.prototype, "name", void 0);
+exports.CounsultantUpdateDto = CounsultantUpdateDto;
+//# sourceMappingURL=consultant-update.dtp.js.map

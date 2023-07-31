@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable, UnauthorizedException } from "@n
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Admin } from "../entities/admin.entity";
-import { AdminUpdateDto } from "./admin-update.dto";
+import { AdminUpdateDto } from "../dtos/admin-update.dto";
 import * as bcrypt from 'bcrypt';
 import { MailerService } from "@nestjs-modules/mailer/dist";
 @Injectable()

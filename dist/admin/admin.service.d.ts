@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 import { Admin } from "../entities/admin.entity";
-import { AdminUpdateDto } from "./admin-update.dto";
+import { AdminUpdateDto } from "../dtos/admin-update.dto";
 import { MailerService } from "@nestjs-modules/mailer/dist";
 export declare class AdminService {
     private adminRepo;

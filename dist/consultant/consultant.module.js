@@ -6,15 +6,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ManagerModule = void 0;
+exports.ConsultantModule = void 0;
 const common_1 = require("@nestjs/common");
+const consultant_service_1 = require("./consultant.service");
+const consultant_entity_1 = require("../entities/consultant.entity");
 const typeorm_1 = require("@nestjs/typeorm");
-const manager_entity_1 = require("../entities/manager.entity");
 const mailer_1 = require("@nestjs-modules/mailer");
-const manager_service_1 = require("./manager.service");
-let ManagerModule = class ManagerModule {
+let ConsultantModule = class ConsultantModule {
 };
-ManagerModule = __decorate([
+ConsultantModule = __decorate([
     (0, common_1.Module)({
         imports: [
             mailer_1.MailerModule.forRoot({
@@ -29,11 +29,11 @@ ManagerModule = __decorate([
                     },
                 }
             }),
-            typeorm_1.TypeOrmModule.forFeature([manager_entity_1.Manager])
+            typeorm_1.TypeOrmModule.forFeature([consultant_entity_1.Consultant])
         ],
         controllers: [],
-        providers: [manager_service_1.ManagerService],
+        providers: [consultant_service_1.ConsultantService]
     })
-], ManagerModule);
-exports.ManagerModule = ManagerModule;
-//# sourceMappingURL=manager.module.js.map
+], ConsultantModule);
+exports.ConsultantModule = ConsultantModule;
+//# sourceMappingURL=consultant.module.js.map
