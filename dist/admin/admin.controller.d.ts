@@ -31,8 +31,6 @@ export declare class AdminController {
     getAdminByManagerId(id: number): any;
     signup(mydto: AdminDto): Promise<any>;
     signin(session: any, mydto: AdminDto): Promise<void>;
-    signout(session: any): {
-        message: string;
-    };
+    signout(request: any, response: any): void;
     sendEmail(mydata: any): Promise<SentMessageInfo>;
 }

@@ -100,13 +100,14 @@ let AdminController = class AdminController {
             throw new exceptions_1.UnauthorizedException({ message: "invalid credentials" });
         }
     }
-    signout(session) {
-        if (session.destroy()) {
-            return { message: "you are logged out" };
-        }
-        else {
-            throw new exceptions_1.UnauthorizedException("invalid actions");
-        }
+    signout(request, response) {
+        request.session.destroy((err) => {
+            if (err) {
+                throw new exceptions_1.UnauthorizedException("Failed to logout");
+            }
+            response.clearCookie("connect.sid");
+            response.send({ message: "You are logged out" });
+        });
     }
     sendEmail(mydata) {
         return this.adminService.Email(mydata);
@@ -262,7 +263,6 @@ __decorate([
 ], AdminController.prototype, "getAdminByManagerId", null);
 __decorate([
     (0, common_1.Post)('/signup'),
-    (0, common_1.UsePipes)(new common_1.ValidationPipe()),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [admin_dto_1.AdminDto]),
@@ -279,10 +279,10 @@ __decorate([
 ], AdminController.prototype, "signin", null);
 __decorate([
     (0, common_1.Get)('/signout'),
-    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
-    __param(0, (0, common_1.Session)()),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "signout", null);
 __decorate([

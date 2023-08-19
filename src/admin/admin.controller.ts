@@ -12,6 +12,8 @@ import {
   Session,
   UseGuards,
   HttpStatus,
+  Req,
+  Res,
 } from '@nestjs/common';
 import { HttpException, UnauthorizedException } from '@nestjs/common/exceptions';
 import { ManagerService } from 'src/manager/manager.service';
@@ -157,7 +159,7 @@ export class AdminController {
   }
    
   @Post('/signup')
-  @UsePipes(new ValidationPipe())
+  // @UsePipes(new ValidationPipe())
   async signup(@Body() mydto: AdminDto): Promise<any> {
     // console.log(mydto)
     return this.adminService.signup(mydto);
@@ -182,17 +184,15 @@ export class AdminController {
   }
 
   @Get('/signout')
-  @UseGuards(SessionGuard)
-  signout(@Session() session)
-  {
-    if(session.destroy())
-    {
-      return {message:"you are logged out"};
-    }
-    else
-    {
-      throw new UnauthorizedException("invalid actions");
-    }
+  // @UseGuards(SessionGuard)
+  signout(@Req() request, @Res() response) {
+    request.session.destroy((err) => {
+      if (err) {
+        throw new UnauthorizedException("Failed to logout");
+      }
+      response.clearCookie("connect.sid");
+      response.send({ message: "You are logged out" });
+    });
   }
 
   @Post('/email')
