@@ -36,25 +36,26 @@ export class AdminController {
   ) { }
 
   @Get('/index')
+  // @UseGuards(SessionGuard)
   getAdmin(): any {
     return this.adminService.getIndex();
   }
 
   @Get('/profile')
-  @UseGuards(SessionGuard)
+  // @UseGuards(SessionGuard)
   getProfile(@Session() session): any {
     return this.adminService.myprofie(session.email);
   }
   
   @Get('/:id')
-  @UseGuards(SessionGuard)
+  // @UseGuards(SessionGuard)
   getAdminByID(@Param('id', ParseIntPipe) id: number): any {
     return this.adminService.getAdminById(id);
   }
 
   @Post('/addAdmin')
-  @UseGuards(SessionGuard)
-  @UsePipes(new ValidationPipe())
+  // @UseGuards(SessionGuard)
+  // @UsePipes(new ValidationPipe())
   addAdmin(@Body() mydto: AdminDto)
   {
     // console.log(mydto)
@@ -62,64 +63,64 @@ export class AdminController {
   }
 
   @Put('/updateAdmin/')
-  @UseGuards(SessionGuard)
-  @UsePipes(new ValidationPipe())
+  // @UseGuards(SessionGuard)
+  // @UsePipes(new ValidationPipe())
   updateAdmin(@Session() session, @Body('name') name: string): any {
     // console.log(session.email);
     return this.adminService.updateAdmin(name, session.email);
   }
 
   @Put('/updateManager/')
-  @UseGuards(SessionGuard)
-  @UsePipes(new ValidationPipe())
+  // @UseGuards(SessionGuard)
+  // @UsePipes(new ValidationPipe())
   updateManager(@Session() session, @Body('name') name: string): any {
     // console.log(session.email);
     return this.managerService.updateManager(name, session.email);
   }
 
   @Put('/updateConsultant/')
-  @UseGuards(SessionGuard)
-  @UsePipes(new ValidationPipe())
+  // @UseGuards(SessionGuard)
+  // @UsePipes(new ValidationPipe())
   updateConsultant(@Session() session, @Body('name') name: string): any {
     // console.log(session.email);
     return this.consultantService.updateConsultant(name, session.email);
   }
 
   @Put('/updateAdmin/:id')
-  @UseGuards(SessionGuard)
-  @UsePipes(new ValidationPipe())
+  // @UseGuards(SessionGuard)
+  // @UsePipes(new ValidationPipe())
   updateAdminbyid(@Body() mydto: AdminUpdateDto, @Param('id', ParseIntPipe) id: number): any {
     return this.adminService.updateAdminbyId(mydto, id);
   }
 
   @Put('/updateManager/:id')
-  @UseGuards(SessionGuard)
-  @UsePipes(new ValidationPipe())
+  // @UseGuards(SessionGuard)
+  // @UsePipes(new ValidationPipe())
   updateManagerbyid(@Body() mydto: ManagerUpdateDto, @Param('id', ParseIntPipe) id: number): any {
     return this.managerService.updateManagerbyId(mydto, id);
   }
 
   @Put('/updateConsultant/:id')
-  @UseGuards(SessionGuard)
-  @UsePipes(new ValidationPipe())
+  // @UseGuards(SessionGuard)
+  // @UsePipes(new ValidationPipe())
   updateConsultantbyid(@Body() mydto: CounsultantUpdateDto, @Param('id', ParseIntPipe) id: number): any {
     return this.consultantService.updateConsultantbyid(mydto, id);
   }
 
   @Delete('/deleteAdmin/:id')
-  @UseGuards(SessionGuard)
+  // @UseGuards(SessionGuard)
   deleteAdminbyId(@Param('id', ParseIntPipe) id: number): any {
     return this.adminService.deleteAdminbyId(id);
   }
 
   @Delete('/deleteManager/:id')
-  @UseGuards(SessionGuard)
+  // @UseGuards(SessionGuard)
   deleteManagerId(@Param('id', ParseIntPipe) id: number): any {
     return this.managerService.deleteManagerbyId(id);
   }
 
   @Delete('/deleteConsultant/:id')
-  @UseGuards(SessionGuard)
+  // @UseGuards(SessionGuard)
   deleteConsultantId(@Param('id', ParseIntPipe) id: number): any {
     return this.consultantService.deleteConsultantId(id);
   }
@@ -132,8 +133,8 @@ export class AdminController {
   // }
 
   @Post('/addManager')
-  @UseGuards(SessionGuard)
-  @UsePipes(new ValidationPipe())
+  // @UseGuards(SessionGuard)
+  // @UsePipes(new ValidationPipe())
   async addManager(@Body() managerDto: ManagerDto, adminDto: AdminDto): Promise<any> {
       const adminId = adminDto.id;
       console.log(adminId);
@@ -141,8 +142,8 @@ export class AdminController {
   }
 
   @Post('/addConsultant')
-  @UseGuards(SessionGuard)
-  @UsePipes(new ValidationPipe())
+  // @UseGuards(SessionGuard)
+  // @UsePipes(new ValidationPipe())
   async addConsultant(@Body() consultantDto: ConsultantDto, adminDto: AdminDto): Promise<any> {
       return this.consultantService.addConsultant(consultantDto);
   }
@@ -153,7 +154,7 @@ export class AdminController {
   }
   
   @Get('/adminbyManager/:id')
-  @UseGuards(SessionGuard)
+  // @UseGuards(SessionGuard)
   getAdminByManagerId(@Param('id', ParseIntPipe) id: number): any {
     return this.managerService.getAdminByManagerID(id);
   }
@@ -166,15 +167,15 @@ export class AdminController {
   }
 
   @Post('/signin')
-  @UsePipes(new ValidationPipe())
+  // @UsePipes(new ValidationPipe())
   async signin(@Session() session, @Body() mydto: AdminDto) {
     const res = await this.adminService.signin(mydto);
     if (res == true)
     {
-      session.adminId = mydto.id;
+      // session.adminId = mydto.id;
       session.email = mydto.email;
-      console.log(session.email);
-      console.log(session.adminId);
+      // console.log(session.email);
+      // console.log(session.adminId);
       throw new HttpException({ message: "Login Successful!" }, HttpStatus.ACCEPTED);
     }
     else
@@ -183,20 +184,19 @@ export class AdminController {
     }
   }
 
-  @Get('/signout')
+  @Post('/signout')
   // @UseGuards(SessionGuard)
-  signout(@Req() request, @Res() response) {
-    request.session.destroy((err) => {
-      if (err) {
-        throw new UnauthorizedException("Failed to logout");
-      }
-      response.clearCookie("connect.sid");
-      response.send({ message: "You are logged out" });
-    });
+  signout( @Req() req) {
+    if (req.session.destroy()) {
+      return({ message: "You are logged out" });
+    }
+    else {
+      throw new UnauthorizedException("invalid actions");
+    }
   }
 
   @Post('/email')
-  @UseGuards(SessionGuard)
+  // @UseGuards(SessionGuard)
   sendEmail(@Body() mydata){
     return this.adminService.Email(mydata);
   }
