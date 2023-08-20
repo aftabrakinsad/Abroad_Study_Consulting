@@ -185,7 +185,7 @@ export class AdminController {
   }
 
   @Post('/signout')
-  @UseGuards(SessionGuard)
+  // @UseGuards(SessionGuard)
   signout( @Req() req) {
     if (req.session.destroy()) {
       return({ message: "You are logged out" });
