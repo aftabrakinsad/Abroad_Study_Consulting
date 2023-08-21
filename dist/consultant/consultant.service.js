@@ -35,6 +35,9 @@ let ConsultantService = class ConsultantService {
         this.consultantRepo = consultantRepo;
         this.mailerService = mailerService;
     }
+    async getTotalConsultants() {
+        return this.consultantRepo.count();
+    }
     async con_profie(email) {
         const data = await this.consultantRepo.findOne({ where: { email } });
         if (data !== null) {

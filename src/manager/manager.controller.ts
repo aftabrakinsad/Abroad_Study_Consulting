@@ -17,14 +17,14 @@ export class ManagerController {
     }
 
     @Post('/signup')
-    @UsePipes(new ValidationPipe())
+    // @UsePipes(new ValidationPipe())
     async signup(@Body() mydto: ManagerDto): Promise<any> {
     // console.log(mydto)
         return this.managerService.signup(mydto);
     }
 
     @Post('/signin')
-    @UsePipes(new ValidationPipe())
+    // @UsePipes(new ValidationPipe())
     async signin(@Session() session, @Body() mydto: ManagerDto) {
         const res = await this.managerService.signin(mydto);
         if (res == true)
@@ -40,7 +40,7 @@ export class ManagerController {
     }
 
     @Get('/signout')
-    @UseGuards(SessionGuard)
+    // @UseGuards(SessionGuard)
     signout(@Session() session)
     {
         if(session.destroy())

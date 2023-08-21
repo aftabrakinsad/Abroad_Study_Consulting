@@ -8,6 +8,7 @@ export declare class ManagerService {
     private mailerService;
     constructor(managerRepo: Repository<Manager>, mailerService: MailerService);
     manager_profie(email: any): Promise<any>;
+    getTotalManagers(): Promise<number>;
     addManager(managerDto: ManagerDto, adminId: number): Promise<Manager>;
     updateManager(name: any, email: any): any;
     updateManagerbyId(mydto: ManagerUpdateDto, id: any): any;

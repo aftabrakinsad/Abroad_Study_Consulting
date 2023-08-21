@@ -17,6 +17,10 @@ export class AdminService {
         return this.adminRepo.find();
     }
 
+    getTotalAdmins(): any {
+        return this.adminRepo.count();
+    }
+
     async myprofie(email): Promise<any>
     {
         const data = await this.adminRepo.findOne({ where: { email } });
@@ -50,7 +54,7 @@ export class AdminService {
         const salt = await bcrypt.genSalt();
         const hassedpassed = await bcrypt.hash(mydto.password, salt);
         mydto.password= hassedpassed;
-        return this.adminRepo.save(mydto);
+        await this.adminRepo.save(mydto);
     }
 
     updateAdmin(username, email): any

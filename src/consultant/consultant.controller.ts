@@ -17,14 +17,14 @@ export class ConsultantController {
     }
 
     @Post('/signup')
-    @UsePipes(new ValidationPipe())
+    // @UsePipes(new ValidationPipe())
     async signup(@Body() mydto: ConsultantDto): Promise<any> {
     // console.log(mydto)
       return this.consultantService.signup(mydto);
     }
 
     @Get('/signout')
-    @UseGuards(SessionGuard)
+    // @UseGuards(SessionGuard)
     signout(@Session() session)
     {
       if(session.destroy())

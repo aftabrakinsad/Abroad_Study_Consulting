@@ -38,6 +38,9 @@ let AdminService = class AdminService {
     getIndex() {
         return this.adminRepo.find();
     }
+    getTotalAdmins() {
+        return this.adminRepo.count();
+    }
     async myprofie(email) {
         const data = await this.adminRepo.findOne({ where: { email } });
         if (data !== null) {
@@ -62,7 +65,7 @@ let AdminService = class AdminService {
         const salt = await bcrypt.genSalt();
         const hassedpassed = await bcrypt.hash(mydto.password, salt);
         mydto.password = hassedpassed;
-        return this.adminRepo.save(mydto);
+        await this.adminRepo.save(mydto);
     }
     updateAdmin(username, email) {
         return this.adminRepo.update({ email: email }, { username: username });

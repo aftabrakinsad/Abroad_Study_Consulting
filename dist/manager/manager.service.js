@@ -46,6 +46,9 @@ let ManagerService = class ManagerService {
             throw new common_1.HttpException('Not Found', common_1.HttpStatus.NOT_FOUND);
         }
     }
+    async getTotalManagers() {
+        return this.managerRepo.count();
+    }
     async addManager(managerDto, adminId) {
         const newManager = new manager_entity_1.Manager();
         newManager.name = managerDto.name;

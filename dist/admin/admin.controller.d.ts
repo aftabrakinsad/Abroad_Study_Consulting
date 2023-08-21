@@ -13,6 +13,9 @@ export declare class AdminController {
     private consultantService;
     constructor(adminService: AdminService, managerService: ManagerService, consultantService: ConsultantService);
     getAdmin(): any;
+    getAdminStatistics(): any;
+    getManagerStatistics(): any;
+    getConsultantStatistics(): any;
     getProfile(session: any): any;
     getAdminByID(id: number): any;
     addAdmin(mydto: AdminDto): Promise<any>;

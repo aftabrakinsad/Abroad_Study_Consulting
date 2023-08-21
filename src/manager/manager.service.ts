@@ -31,6 +31,10 @@ export class ManagerService {
         }
     }
 
+    async getTotalManagers(): Promise<number> {
+        return this.managerRepo.count();
+    }
+
     // addManager(mydto: ManagerDto): any 
     // {    
     //    return this.managerRepo.save(mydto);

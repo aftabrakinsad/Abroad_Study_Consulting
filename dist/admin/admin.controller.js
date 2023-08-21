@@ -20,7 +20,6 @@ const admin_update_dto_1 = require("../dtos/admin-update.dto");
 const admin_service_1 = require("./admin.service");
 const admin_dto_1 = require("../dtos/admin.dto");
 const manager_dto_1 = require("../dtos/manager.dto");
-const session_guard_1 = require("../session.guard");
 const Consultant_dto_1 = require("../dtos/Consultant.dto");
 const consultant_service_1 = require("../consultant/consultant.service");
 const manager_update_dto_1 = require("../dtos/manager-update.dto");
@@ -34,13 +33,22 @@ let AdminController = class AdminController {
     getAdmin() {
         return this.adminService.getIndex();
     }
+    getAdminStatistics() {
+        return this.adminService.getTotalAdmins();
+    }
+    getManagerStatistics() {
+        return this.managerService.getTotalManagers();
+    }
+    getConsultantStatistics() {
+        return this.consultantService.getTotalConsultants();
+    }
     getProfile(session) {
         return this.adminService.myprofie(session.email);
     }
     getAdminByID(id) {
         return this.adminService.getAdminById(id);
     }
-    addAdmin(mydto) {
+    async addAdmin(mydto) {
         return this.adminService.addAdmin(mydto);
     }
     updateAdmin(session, name) {
@@ -111,14 +119,30 @@ let AdminController = class AdminController {
 };
 __decorate([
     (0, common_1.Get)('/index'),
-    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Object)
 ], AdminController.prototype, "getAdmin", null);
 __decorate([
+    (0, common_1.Get)('/adminCount'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Object)
+], AdminController.prototype, "getAdminStatistics", null);
+__decorate([
+    (0, common_1.Get)('/managerCount'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Object)
+], AdminController.prototype, "getManagerStatistics", null);
+__decorate([
+    (0, common_1.Get)('/consultantCount'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Object)
+], AdminController.prototype, "getConsultantStatistics", null);
+__decorate([
     (0, common_1.Get)('/profile'),
-    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Session)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -126,7 +150,6 @@ __decorate([
 ], AdminController.prototype, "getProfile", null);
 __decorate([
     (0, common_1.Get)('/:id'),
-    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
@@ -134,15 +157,13 @@ __decorate([
 ], AdminController.prototype, "getAdminByID", null);
 __decorate([
     (0, common_1.Post)('/addAdmin'),
-    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [admin_dto_1.AdminDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], AdminController.prototype, "addAdmin", null);
 __decorate([
     (0, common_1.Put)('/updateAdmin/'),
-    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Session)()),
     __param(1, (0, common_1.Body)('name')),
     __metadata("design:type", Function),
@@ -151,7 +172,6 @@ __decorate([
 ], AdminController.prototype, "updateAdmin", null);
 __decorate([
     (0, common_1.Put)('/updateManager/'),
-    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Session)()),
     __param(1, (0, common_1.Body)('name')),
     __metadata("design:type", Function),
@@ -160,7 +180,6 @@ __decorate([
 ], AdminController.prototype, "updateManager", null);
 __decorate([
     (0, common_1.Put)('/updateConsultant/'),
-    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Session)()),
     __param(1, (0, common_1.Body)('name')),
     __metadata("design:type", Function),
@@ -169,7 +188,6 @@ __decorate([
 ], AdminController.prototype, "updateConsultant", null);
 __decorate([
     (0, common_1.Put)('/updateAdmin/:id'),
-    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
@@ -178,7 +196,6 @@ __decorate([
 ], AdminController.prototype, "updateAdminbyid", null);
 __decorate([
     (0, common_1.Put)('/updateManager/:id'),
-    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
@@ -187,7 +204,6 @@ __decorate([
 ], AdminController.prototype, "updateManagerbyid", null);
 __decorate([
     (0, common_1.Put)('/updateConsultant/:id'),
-    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
@@ -196,7 +212,6 @@ __decorate([
 ], AdminController.prototype, "updateConsultantbyid", null);
 __decorate([
     (0, common_1.Delete)('/deleteAdmin/:id'),
-    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
@@ -204,7 +219,6 @@ __decorate([
 ], AdminController.prototype, "deleteAdminbyId", null);
 __decorate([
     (0, common_1.Delete)('/deleteManager/:id'),
-    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
@@ -212,16 +226,13 @@ __decorate([
 ], AdminController.prototype, "deleteManagerId", null);
 __decorate([
     (0, common_1.Delete)('/deleteConsultant/:id'),
-    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Object)
 ], AdminController.prototype, "deleteConsultantId", null);
 __decorate([
-    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     (0, common_1.Post)('/addManager'),
-    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [manager_dto_1.ManagerDto, admin_dto_1.AdminDto]),
@@ -229,7 +240,6 @@ __decorate([
 ], AdminController.prototype, "addManager", null);
 __decorate([
     (0, common_1.Post)('/addConsultant'),
-    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Consultant_dto_1.ConsultantDto, admin_dto_1.AdminDto]),
@@ -244,7 +254,6 @@ __decorate([
 ], AdminController.prototype, "getManagerByAdminId", null);
 __decorate([
     (0, common_1.Get)('/adminbyManager/:id'),
-    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
@@ -274,7 +283,6 @@ __decorate([
 ], AdminController.prototype, "signout", null);
 __decorate([
     (0, common_1.Post)('/email'),
-    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

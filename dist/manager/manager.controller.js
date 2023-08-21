@@ -14,7 +14,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ManagerController = void 0;
 const common_1 = require("@nestjs/common");
-const session_guard_1 = require("../session.guard");
 const manager_service_1 = require("./manager.service");
 const manager_dto_1 = require("../dtos/manager.dto");
 let ManagerController = class ManagerController {
@@ -59,7 +58,6 @@ __decorate([
 ], ManagerController.prototype, "getProfile", null);
 __decorate([
     (0, common_1.Post)('/signup'),
-    (0, common_1.UsePipes)(new common_1.ValidationPipe()),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [manager_dto_1.ManagerDto]),
@@ -67,7 +65,6 @@ __decorate([
 ], ManagerController.prototype, "signup", null);
 __decorate([
     (0, common_1.Post)('/signin'),
-    (0, common_1.UsePipes)(new common_1.ValidationPipe()),
     __param(0, (0, common_1.Session)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -76,7 +73,6 @@ __decorate([
 ], ManagerController.prototype, "signin", null);
 __decorate([
     (0, common_1.Get)('/signout'),
-    (0, common_1.UseGuards)(session_guard_1.SessionGuard),
     __param(0, (0, common_1.Session)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

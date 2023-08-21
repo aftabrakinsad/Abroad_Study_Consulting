@@ -7,6 +7,7 @@ export declare class AdminService {
     private mailerService;
     constructor(adminRepo: Repository<Admin>, mailerService: MailerService);
     getIndex(): any;
+    getTotalAdmins(): any;
     myprofie(email: any): Promise<any>;
     getAdminById(id: any): Promise<{
         username: string;
@@ -14,7 +15,7 @@ export declare class AdminService {
         address: string;
         managers: import("../entities/manager.entity").Manager[];
     }>;
-    addAdmin(mydto: any): Promise<any>;
+    addAdmin(mydto: any): Promise<void>;
     updateAdmin(username: any, email: any): any;
     updateAdminbyId(mydto: AdminUpdateDto, id: any): any;
     deleteAdminbyId(id: any): any;

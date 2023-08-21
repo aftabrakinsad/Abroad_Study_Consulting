@@ -15,6 +15,10 @@ export class ConsultantService {
         private mailerService: MailerService
     ) { }
 
+    async getTotalConsultants(): Promise<number> {
+        return this.consultantRepo.count();
+    }
+
     async con_profie(email): Promise<any>
     {
         const data = await this.consultantRepo.findOne({ where: { email } });

@@ -7,6 +7,7 @@ export declare class ConsultantService {
     private consultantRepo;
     private mailerService;
     constructor(consultantRepo: Repository<Consultant>, mailerService: MailerService);
+    getTotalConsultants(): Promise<number>;
     con_profie(email: any): Promise<any>;
     updateConsultant(name: any, email: any): any;
     updateConsultantbyid(mydto: CounsultantUpdateDto, id: any): any;
