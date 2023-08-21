@@ -12,9 +12,9 @@ const consultant_service_1 = require("./consultant.service");
 const consultant_entity_1 = require("../entities/consultant.entity");
 const typeorm_1 = require("@nestjs/typeorm");
 const mailer_1 = require("@nestjs-modules/mailer");
-let ConsultantModule = class ConsultantModule {
+let ConsultantModule = exports.ConsultantModule = class ConsultantModule {
 };
-ConsultantModule = __decorate([
+exports.ConsultantModule = ConsultantModule = __decorate([
     (0, common_1.Module)({
         imports: [
             mailer_1.MailerModule.forRoot({
@@ -35,5 +35,4 @@ ConsultantModule = __decorate([
         providers: [consultant_service_1.ConsultantService]
     })
 ], ConsultantModule);
-exports.ConsultantModule = ConsultantModule;
 //# sourceMappingURL=consultant.module.js.map

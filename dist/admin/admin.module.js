@@ -17,9 +17,9 @@ const mailer_1 = require("@nestjs-modules/mailer");
 const manager_entity_1 = require("../entities/manager.entity");
 const consultant_service_1 = require("../consultant/consultant.service");
 const consultant_entity_1 = require("../entities/consultant.entity");
-let AdminModule = class AdminModule {
+let AdminModule = exports.AdminModule = class AdminModule {
 };
-AdminModule = __decorate([
+exports.AdminModule = AdminModule = __decorate([
     (0, common_1.Module)({
         imports: [
             mailer_1.MailerModule.forRoot({
@@ -40,5 +40,4 @@ AdminModule = __decorate([
         providers: [admin_service_1.AdminService, manager_service_1.ManagerService, consultant_service_1.ConsultantService],
     })
 ], AdminModule);
-exports.AdminModule = AdminModule;
 //# sourceMappingURL=admin.module.js.map

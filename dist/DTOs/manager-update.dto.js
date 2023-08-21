@@ -13,9 +13,9 @@ exports.ManagerUpdateDto = void 0;
 const class_validator_1 = require("class-validator");
 class ManagerUpdateDto {
 }
+exports.ManagerUpdateDto = ManagerUpdateDto;
 __decorate([
     (0, class_validator_1.Length)(3, 5),
     __metadata("design:type", String)
 ], ManagerUpdateDto.prototype, "name", void 0);
-exports.ManagerUpdateDto = ManagerUpdateDto;
 //# sourceMappingURL=manager-update.dto.js.map

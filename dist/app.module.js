@@ -14,9 +14,9 @@ const manager_module_1 = require("./manager/manager.module");
 const serve_static_1 = require("@nestjs/serve-static");
 const path_1 = require("path");
 const consultant_module_1 = require("./consultant/consultant.module");
-let AppModule = class AppModule {
+let AppModule = exports.AppModule = class AppModule {
 };
-AppModule = __decorate([
+exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [admin_module_1.AdminModule, manager_module_1.ManagerModule, consultant_module_1.ConsultantModule, typeorm_1.TypeOrmModule.forRoot({
                 type: 'postgres',
@@ -38,5 +38,4 @@ AppModule = __decorate([
         providers: [],
     })
 ], AppModule);
-exports.AppModule = AppModule;
 //# sourceMappingURL=app.module.js.map

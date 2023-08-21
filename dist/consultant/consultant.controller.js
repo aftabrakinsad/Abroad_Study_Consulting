@@ -16,7 +16,7 @@ exports.ConsultantController = void 0;
 const common_1 = require("@nestjs/common");
 const consultant_service_1 = require("./consultant.service");
 const Consultant_dto_1 = require("../dtos/Consultant.dto");
-let ConsultantController = class ConsultantController {
+let ConsultantController = exports.ConsultantController = class ConsultantController {
     constructor(consultantService) {
         this.consultantService = consultantService;
     }
@@ -66,9 +66,8 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], ConsultantController.prototype, "sendEmail", null);
-ConsultantController = __decorate([
+exports.ConsultantController = ConsultantController = __decorate([
     (0, common_1.Controller)('consultant'),
     __metadata("design:paramtypes", [consultant_service_1.ConsultantService])
 ], ConsultantController);
-exports.ConsultantController = ConsultantController;
 //# sourceMappingURL=consultant.controller.js.map

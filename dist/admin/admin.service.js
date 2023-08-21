@@ -30,7 +30,7 @@ const typeorm_2 = require("typeorm");
 const admin_entity_1 = require("../entities/admin.entity");
 const bcrypt = require("bcrypt");
 const dist_1 = require("@nestjs-modules/mailer/dist");
-let AdminService = class AdminService {
+let AdminService = exports.AdminService = class AdminService {
     constructor(adminRepo, mailerService) {
         this.adminRepo = adminRepo;
         this.mailerService = mailerService;
@@ -133,11 +133,10 @@ let AdminService = class AdminService {
         });
     }
 };
-AdminService = __decorate([
+exports.AdminService = AdminService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(admin_entity_1.Admin)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         dist_1.MailerService])
 ], AdminService);
-exports.AdminService = AdminService;
 //# sourceMappingURL=admin.service.js.map

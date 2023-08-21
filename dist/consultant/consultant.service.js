@@ -30,7 +30,7 @@ const typeorm_1 = require("@nestjs/typeorm");
 const consultant_entity_1 = require("../entities/consultant.entity");
 const typeorm_2 = require("typeorm");
 const bcrypt = require("bcrypt");
-let ConsultantService = class ConsultantService {
+let ConsultantService = exports.ConsultantService = class ConsultantService {
     constructor(consultantRepo, mailerService) {
         this.consultantRepo = consultantRepo;
         this.mailerService = mailerService;
@@ -92,11 +92,10 @@ let ConsultantService = class ConsultantService {
         });
     }
 };
-ConsultantService = __decorate([
+exports.ConsultantService = ConsultantService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(consultant_entity_1.Consultant)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         dist_1.MailerService])
 ], ConsultantService);
-exports.ConsultantService = ConsultantService;
 //# sourceMappingURL=consultant.service.js.map

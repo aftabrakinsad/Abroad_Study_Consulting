@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Admin = void 0;
 const manager_entity_1 = require("./manager.entity");
 const typeorm_1 = require("typeorm");
-let Admin = class Admin {
+let Admin = exports.Admin = class Admin {
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
@@ -38,8 +38,7 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => manager_entity_1.Manager, (manager) => manager.admin),
     __metadata("design:type", Array)
 ], Admin.prototype, "managers", void 0);
-Admin = __decorate([
+exports.Admin = Admin = __decorate([
     (0, typeorm_1.Entity)("admin")
 ], Admin);
-exports.Admin = Admin;
 //# sourceMappingURL=admin.entity.js.map

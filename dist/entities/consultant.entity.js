@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Consultant = void 0;
 const typeorm_1 = require("typeorm");
-let Consultant = class Consultant {
+let Consultant = exports.Consultant = class Consultant {
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
@@ -37,8 +37,7 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Consultant.prototype, "country", void 0);
-Consultant = __decorate([
+exports.Consultant = Consultant = __decorate([
     (0, typeorm_1.Entity)("consultant")
 ], Consultant);
-exports.Consultant = Consultant;
 //# sourceMappingURL=consultant.entity.js.map

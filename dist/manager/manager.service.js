@@ -31,7 +31,7 @@ const manager_entity_1 = require("../entities/manager.entity");
 const admin_entity_1 = require("../entities/admin.entity");
 const dist_1 = require("@nestjs-modules/mailer/dist");
 const bcrypt = require("bcrypt");
-let ManagerService = class ManagerService {
+let ManagerService = exports.ManagerService = class ManagerService {
     constructor(managerRepo, mailerService) {
         this.managerRepo = managerRepo;
         this.mailerService = mailerService;
@@ -126,11 +126,10 @@ let ManagerService = class ManagerService {
         });
     }
 };
-ManagerService = __decorate([
+exports.ManagerService = ManagerService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(manager_entity_1.Manager)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         dist_1.MailerService])
 ], ManagerService);
-exports.ManagerService = ManagerService;
 //# sourceMappingURL=manager.service.js.map

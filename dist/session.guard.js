@@ -8,14 +8,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SessionGuard = void 0;
 const common_1 = require("@nestjs/common");
-let SessionGuard = class SessionGuard {
+let SessionGuard = exports.SessionGuard = class SessionGuard {
     canActivate(context) {
         const request = context.switchToHttp().getRequest();
         return request.session.email !== undefined;
     }
 };
-SessionGuard = __decorate([
+exports.SessionGuard = SessionGuard = __decorate([
     (0, common_1.Injectable)()
 ], SessionGuard);
-exports.SessionGuard = SessionGuard;
 //# sourceMappingURL=session.guard.js.map

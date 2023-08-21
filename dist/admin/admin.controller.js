@@ -24,7 +24,7 @@ const Consultant_dto_1 = require("../dtos/Consultant.dto");
 const consultant_service_1 = require("../consultant/consultant.service");
 const manager_update_dto_1 = require("../dtos/manager-update.dto");
 const consultant_update_dtp_1 = require("../dtos/consultant-update.dtp");
-let AdminController = class AdminController {
+let AdminController = exports.AdminController = class AdminController {
     constructor(adminService, managerService, consultantService) {
         this.adminService = adminService;
         this.managerService = managerService;
@@ -288,11 +288,10 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "sendEmail", null);
-AdminController = __decorate([
+exports.AdminController = AdminController = __decorate([
     (0, common_1.Controller)('admin'),
     __metadata("design:paramtypes", [admin_service_1.AdminService,
         manager_service_1.ManagerService,
         consultant_service_1.ConsultantService])
 ], AdminController);
-exports.AdminController = AdminController;
 //# sourceMappingURL=admin.controller.js.map
