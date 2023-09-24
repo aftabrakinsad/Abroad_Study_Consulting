@@ -3,5 +3,4 @@ export declare class ManagerDto {
     email: string;
     password: string;
     address: string;
-    adminId: number;
 }

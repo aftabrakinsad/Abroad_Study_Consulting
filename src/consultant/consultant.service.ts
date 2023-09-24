@@ -15,6 +15,10 @@ export class ConsultantService {
         private mailerService: MailerService
     ) { }
 
+    getConsultants(): any {
+        return this.consultantRepo.find();
+    }
+
     async getTotalConsultants(): Promise<number> {
         return this.consultantRepo.count();
     }
@@ -38,9 +42,52 @@ export class ConsultantService {
         return this.consultantRepo.update({ email:email },{ name:name });
     }
 
-    updateConsultantbyid(mydto: CounsultantUpdateDto, id): any
+    async updateConsultantbyid(mydto, id)
     {
-        return this.consultantRepo.update(id, mydto);
+        const salt = bcrypt.genSaltSync();
+        const hashedPassword = bcrypt.hashSync(mydto.password, salt);
+        mydto.password = hashedPassword;
+
+        const existingConsultantPhone = await this.consultantRepo.findOne({ where: { phone: mydto.phone } });
+        const existingConsultantEmail = await this.consultantRepo.findOne({ where: { email: mydto.email } });
+
+        if (mydto.name === '')
+        {
+            throw new HttpException({ message: "Please provide the username" }, HttpStatus.BAD_REQUEST);
+        } 
+        else if (mydto.phone === '')
+        {
+            throw new HttpException({ message: "Please provide the phone number" }, HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.email === '')
+        {
+            throw new HttpException({ message: "Please provide the email" }, HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.password === '')
+        {
+            throw new HttpException({ message: "Please provide the password" }, HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.country === '')
+        {
+            throw new HttpException({ message: "Please provide the country" }, HttpStatus.BAD_REQUEST);
+        }
+        // else if (existingConsultant)
+        // {
+        //     throw new HttpException({ message: "Username already exists" }, HttpStatus.BAD_REQUEST);
+        // }
+        else if(existingConsultantPhone)
+        {
+            throw new HttpException({ message: "Phone number already exists" }, HttpStatus.BAD_REQUEST);
+        }
+        else if(existingConsultantEmail)
+        {
+            throw new HttpException({ message: "Email already exists" }, HttpStatus.BAD_REQUEST);
+        }
+        else 
+        {
+            await this.consultantRepo.update(id, mydto);
+            throw new HttpException('Consultant Added Successful.', HttpStatus.OK);
+        }
     }
 
     deleteConsultantId(id): any
@@ -48,19 +95,68 @@ export class ConsultantService {
         return this.consultantRepo.delete(id);
     }
 
-    // async addConsultant(consultantDto: ConsultantDto): Promise<Consultant> {
-    //     const newConsultant = new Consultant();
-    //     newConsultant.name = consultantDto.name;
-    //     newConsultant.email = consultantDto.email;
-    //     newConsultant.country = consultantDto.country;
+    async addConsultant(mydto)
+    {
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(mydto.password, salt);
+        mydto.password = hashedPassword;
 
-    //     return this.consultantRepo.save(newConsultant);
-    // }
+        // const existingConsultant = await this.consultantRepo.findOne({ where: { name: mydto.name } });
+        const existingConsultantPhone = await this.consultantRepo.findOne({ where: { phone: mydto.phone } });
+        const existingConsultantEmail = await this.consultantRepo.findOne({ where: { email: mydto.email } });
 
-    addConsultant(consultantDto: ConsultantDto): any 
-    {    
-        this.consultantRepo.save(consultantDto);
-        return 'Consultant Added Successfully';
+        if (mydto.name === '')
+        {
+            throw new HttpException({ message: "Please provide the username" }, HttpStatus.BAD_REQUEST);
+        } 
+        else if (mydto.phone === '')
+        {
+            throw new HttpException({ message: "Please provide the phone number" }, HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.email === '')
+        {
+            throw new HttpException({ message: "Please provide the email" }, HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.password === '')
+        {
+            throw new HttpException({ message: "Please provide the password" }, HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.country === '')
+        {
+            throw new HttpException({ message: "Please provide the country" }, HttpStatus.BAD_REQUEST);
+        }
+        // else if (existingConsultant)
+        // {
+        //     throw new HttpException({ message: "Username already exists" }, HttpStatus.BAD_REQUEST);
+        // }
+        else if(existingConsultantPhone)
+        {
+            throw new HttpException({ message: "Phone number already exists" }, HttpStatus.BAD_REQUEST);
+        }
+        else if(existingConsultantEmail)
+        {
+            throw new HttpException({ message: "Email already exists" }, HttpStatus.BAD_REQUEST);
+        }
+        else 
+        {
+            await this.consultantRepo.save(mydto);
+            throw new HttpException('Consultant Added Successful.', HttpStatus.OK);
+        }
+    }
+
+    async getConsultantById(id)
+    {
+        const data = await this.consultantRepo.findOne({ where: { id } });
+
+        if (data !== null)
+        {
+            const { id, password, ...filteredData } = data;
+            return filteredData;
+        }
+        else
+        {
+            throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+        }
     }
 
     async signup(mydto)

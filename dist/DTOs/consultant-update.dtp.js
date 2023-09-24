@@ -13,9 +13,9 @@ exports.CounsultantUpdateDto = void 0;
 const class_validator_1 = require("class-validator");
 class CounsultantUpdateDto {
 }
-exports.CounsultantUpdateDto = CounsultantUpdateDto;
 __decorate([
     (0, class_validator_1.Length)(3, 5),
     __metadata("design:type", String)
 ], CounsultantUpdateDto.prototype, "name", void 0);
+exports.CounsultantUpdateDto = CounsultantUpdateDto;
 //# sourceMappingURL=consultant-update.dtp.js.map

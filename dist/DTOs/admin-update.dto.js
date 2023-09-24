@@ -13,9 +13,9 @@ exports.AdminUpdateDto = void 0;
 const class_validator_1 = require("class-validator");
 class AdminUpdateDto {
 }
-exports.AdminUpdateDto = AdminUpdateDto;
 __decorate([
     (0, class_validator_1.Length)(3, 5),
     __metadata("design:type", String)
 ], AdminUpdateDto.prototype, "username", void 0);
+exports.AdminUpdateDto = AdminUpdateDto;
 //# sourceMappingURL=admin-update.dto.js.map

@@ -30,10 +30,13 @@ const typeorm_1 = require("@nestjs/typeorm");
 const consultant_entity_1 = require("../entities/consultant.entity");
 const typeorm_2 = require("typeorm");
 const bcrypt = require("bcrypt");
-let ConsultantService = exports.ConsultantService = class ConsultantService {
+let ConsultantService = class ConsultantService {
     constructor(consultantRepo, mailerService) {
         this.consultantRepo = consultantRepo;
         this.mailerService = mailerService;
+    }
+    getConsultants() {
+        return this.consultantRepo.find();
     }
     async getTotalConsultants() {
         return this.consultantRepo.count();
@@ -51,15 +54,82 @@ let ConsultantService = exports.ConsultantService = class ConsultantService {
     updateConsultant(name, email) {
         return this.consultantRepo.update({ email: email }, { name: name });
     }
-    updateConsultantbyid(mydto, id) {
-        return this.consultantRepo.update(id, mydto);
+    async updateConsultantbyid(mydto, id) {
+        const salt = bcrypt.genSaltSync();
+        const hashedPassword = bcrypt.hashSync(mydto.password, salt);
+        mydto.password = hashedPassword;
+        const existingConsultantPhone = await this.consultantRepo.findOne({ where: { phone: mydto.phone } });
+        const existingConsultantEmail = await this.consultantRepo.findOne({ where: { email: mydto.email } });
+        if (mydto.name === '') {
+            throw new common_1.HttpException({ message: "Please provide the username" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.phone === '') {
+            throw new common_1.HttpException({ message: "Please provide the phone number" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.email === '') {
+            throw new common_1.HttpException({ message: "Please provide the email" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.password === '') {
+            throw new common_1.HttpException({ message: "Please provide the password" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.country === '') {
+            throw new common_1.HttpException({ message: "Please provide the country" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else if (existingConsultantPhone) {
+            throw new common_1.HttpException({ message: "Phone number already exists" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else if (existingConsultantEmail) {
+            throw new common_1.HttpException({ message: "Email already exists" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else {
+            await this.consultantRepo.update(id, mydto);
+            throw new common_1.HttpException('Consultant Added Successful.', common_1.HttpStatus.OK);
+        }
     }
     deleteConsultantId(id) {
         return this.consultantRepo.delete(id);
     }
-    addConsultant(consultantDto) {
-        this.consultantRepo.save(consultantDto);
-        return 'Consultant Added Successfully';
+    async addConsultant(mydto) {
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(mydto.password, salt);
+        mydto.password = hashedPassword;
+        const existingConsultantPhone = await this.consultantRepo.findOne({ where: { phone: mydto.phone } });
+        const existingConsultantEmail = await this.consultantRepo.findOne({ where: { email: mydto.email } });
+        if (mydto.name === '') {
+            throw new common_1.HttpException({ message: "Please provide the username" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.phone === '') {
+            throw new common_1.HttpException({ message: "Please provide the phone number" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.email === '') {
+            throw new common_1.HttpException({ message: "Please provide the email" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.password === '') {
+            throw new common_1.HttpException({ message: "Please provide the password" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.country === '') {
+            throw new common_1.HttpException({ message: "Please provide the country" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else if (existingConsultantPhone) {
+            throw new common_1.HttpException({ message: "Phone number already exists" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else if (existingConsultantEmail) {
+            throw new common_1.HttpException({ message: "Email already exists" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else {
+            await this.consultantRepo.save(mydto);
+            throw new common_1.HttpException('Consultant Added Successful.', common_1.HttpStatus.OK);
+        }
+    }
+    async getConsultantById(id) {
+        const data = await this.consultantRepo.findOne({ where: { id } });
+        if (data !== null) {
+            const { id, password } = data, filteredData = __rest(data, ["id", "password"]);
+            return filteredData;
+        }
+        else {
+            throw new common_1.HttpException('Not Found', common_1.HttpStatus.NOT_FOUND);
+        }
     }
     async signup(mydto) {
         const salt = await bcrypt.genSalt();
@@ -92,10 +162,11 @@ let ConsultantService = exports.ConsultantService = class ConsultantService {
         });
     }
 };
-exports.ConsultantService = ConsultantService = __decorate([
+ConsultantService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(consultant_entity_1.Consultant)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         dist_1.MailerService])
 ], ConsultantService);
+exports.ConsultantService = ConsultantService;
 //# sourceMappingURL=consultant.service.js.map

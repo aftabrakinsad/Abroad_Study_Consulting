@@ -18,6 +18,6 @@ export class Admin {
   @Column()
   address: string;
   
-  @OneToMany(() => Manager, (manager) => manager.admin)
-  managers: Manager[];
+  // @OneToMany(() => Manager, (manager) => manager.admin)
+  // managers: Manager[];
 }

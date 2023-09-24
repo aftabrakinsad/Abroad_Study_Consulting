@@ -18,6 +18,6 @@ export class Manager {
   @Column()
   address: string;
 
-  @ManyToOne(() => Admin, (admin) => admin.managers)
-  admin: Admin;
+  // @ManyToOne(() => Admin, (admin) => admin.managers)
+  // admin: Admin;
 }

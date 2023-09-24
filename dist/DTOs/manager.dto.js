@@ -13,7 +13,6 @@ exports.ManagerDto = void 0;
 const class_validator_1 = require("class-validator");
 class ManagerDto {
 }
-exports.ManagerDto = ManagerDto;
 __decorate([
     (0, class_validator_1.IsEmail)(),
     (0, class_validator_1.IsNotEmpty)(),
@@ -25,4 +24,5 @@ __decorate([
     (0, class_validator_1.Matches)(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/, { message: 'password too weak' }),
     __metadata("design:type", String)
 ], ManagerDto.prototype, "password", void 0);
+exports.ManagerDto = ManagerDto;
 //# sourceMappingURL=manager.dto.js.map

@@ -13,6 +13,4 @@ export class ManagerDto {
     password: string;
 
     address: string;
-
-    adminId: number;
 }

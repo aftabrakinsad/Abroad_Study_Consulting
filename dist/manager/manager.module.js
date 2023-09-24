@@ -12,9 +12,9 @@ const typeorm_1 = require("@nestjs/typeorm");
 const manager_entity_1 = require("../entities/manager.entity");
 const mailer_1 = require("@nestjs-modules/mailer");
 const manager_service_1 = require("./manager.service");
-let ManagerModule = exports.ManagerModule = class ManagerModule {
+let ManagerModule = class ManagerModule {
 };
-exports.ManagerModule = ManagerModule = __decorate([
+ManagerModule = __decorate([
     (0, common_1.Module)({
         imports: [
             mailer_1.MailerModule.forRoot({
@@ -25,7 +25,7 @@ exports.ManagerModule = ManagerModule = __decorate([
                     secure: true,
                     auth: {
                         user: 'rakinsadaftab@gmail.com',
-                        pass: '',
+                        pass: 'rvaxlwlwfhbztjbm',
                     },
                 }
             }),
@@ -35,4 +35,5 @@ exports.ManagerModule = ManagerModule = __decorate([
         providers: [manager_service_1.ManagerService],
     })
 ], ManagerModule);
+exports.ManagerModule = ManagerModule;
 //# sourceMappingURL=manager.module.js.map

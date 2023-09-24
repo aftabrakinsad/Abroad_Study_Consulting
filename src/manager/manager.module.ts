@@ -14,7 +14,7 @@ import { ManagerService } from "./manager.service";
             secure: true,
             auth: {
                 user: 'rakinsadaftab@gmail.com',
-                pass: '',
+                pass: 'rvaxlwlwfhbztjbm',
             },
         }
     }),

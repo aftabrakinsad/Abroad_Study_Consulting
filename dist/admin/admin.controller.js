@@ -24,7 +24,7 @@ const Consultant_dto_1 = require("../dtos/Consultant.dto");
 const consultant_service_1 = require("../consultant/consultant.service");
 const manager_update_dto_1 = require("../dtos/manager-update.dto");
 const consultant_update_dtp_1 = require("../dtos/consultant-update.dtp");
-let AdminController = exports.AdminController = class AdminController {
+let AdminController = class AdminController {
     constructor(adminService, managerService, consultantService) {
         this.adminService = adminService;
         this.managerService = managerService;
@@ -32,6 +32,12 @@ let AdminController = exports.AdminController = class AdminController {
     }
     getAdmin() {
         return this.adminService.getIndex();
+    }
+    getManagers() {
+        return this.managerService.getManagers();
+    }
+    getConsultants() {
+        return this.consultantService.getConsultants();
     }
     getAdminStatistics() {
         return this.adminService.getTotalAdmins();
@@ -48,11 +54,20 @@ let AdminController = exports.AdminController = class AdminController {
     getAdminByID(id) {
         return this.adminService.getAdminById(id);
     }
-    async addAdmin(mydto) {
-        return this.adminService.addAdmin(mydto);
+    getConsultantByID(id) {
+        return this.consultantService.getConsultantById(id);
     }
-    updateAdmin(session, name) {
-        return this.adminService.updateAdmin(name, session.email);
+    getManagerByID(id) {
+        return this.managerService.getManagerById(id);
+    }
+    getAdminByName(username) {
+        return this.adminService.getAdminByName(username);
+    }
+    getAdminByEmail(email) {
+        return this.adminService.getAdminByEmail(email);
+    }
+    async updateAdmin(adminDto) {
+        return this.adminService.updateAdmin(adminDto);
     }
     updateManager(session, name) {
         return this.managerService.updateManager(name, session.email);
@@ -67,7 +82,7 @@ let AdminController = exports.AdminController = class AdminController {
         return this.managerService.updateManagerbyId(mydto, id);
     }
     updateConsultantbyid(mydto, id) {
-        return this.consultantService.updateConsultantbyid(mydto, id);
+        return this.consultantService.updateConsultantbyid(id, mydto);
     }
     deleteAdminbyId(id) {
         return this.adminService.deleteAdminbyId(id);
@@ -78,19 +93,14 @@ let AdminController = exports.AdminController = class AdminController {
     deleteConsultantId(id) {
         return this.consultantService.deleteConsultantId(id);
     }
-    async addManager(managerDto, adminDto) {
-        const adminId = adminDto.id;
-        console.log(adminId);
-        return this.managerService.addManager(managerDto, adminId);
+    async addAdmin(admindto) {
+        return this.adminService.addAdmin(admindto);
     }
-    async addConsultant(consultantDto, adminDto) {
+    async addManager(managerDto) {
+        return this.managerService.addManager(managerDto);
+    }
+    async addConsultant(consultantDto) {
         return this.consultantService.addConsultant(consultantDto);
-    }
-    getManagerByAdminId(id) {
-        return this.adminService.ManagersByAdminId(id);
-    }
-    getAdminByManagerId(id) {
-        return this.managerService.getAdminByManagerID(id);
     }
     async signup(mydto) {
         return this.adminService.signup(mydto);
@@ -113,8 +123,14 @@ let AdminController = exports.AdminController = class AdminController {
             throw new exceptions_1.UnauthorizedException("invalid actions");
         }
     }
-    sendEmail(mydata) {
-        return this.adminService.Email(mydata);
+    async sendEmail(mydata) {
+        try {
+            const result = await this.adminService.sendEmail(mydata);
+            return { message: 'Email sent successfully', result };
+        }
+        catch (error) {
+            return { message: 'Failed to send email', error: error.message };
+        }
     }
 };
 __decorate([
@@ -123,6 +139,18 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Object)
 ], AdminController.prototype, "getAdmin", null);
+__decorate([
+    (0, common_1.Get)('/managers'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Object)
+], AdminController.prototype, "getManagers", null);
+__decorate([
+    (0, common_1.Get)('/consultants'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Object)
+], AdminController.prototype, "getConsultants", null);
 __decorate([
     (0, common_1.Get)('/adminCount'),
     __metadata("design:type", Function),
@@ -156,19 +184,39 @@ __decorate([
     __metadata("design:returntype", Object)
 ], AdminController.prototype, "getAdminByID", null);
 __decorate([
-    (0, common_1.Post)('/addAdmin'),
+    (0, common_1.Get)('/consultant/:id'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Object)
+], AdminController.prototype, "getConsultantByID", null);
+__decorate([
+    (0, common_1.Get)('/manager/:id'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Object)
+], AdminController.prototype, "getManagerByID", null);
+__decorate([
+    (0, common_1.Get)('username/:username'),
+    __param(0, (0, common_1.Param)('username')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Object)
+], AdminController.prototype, "getAdminByName", null);
+__decorate([
+    (0, common_1.Get)('/email/:email'),
+    __param(0, (0, common_1.Param)('email')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Object)
+], AdminController.prototype, "getAdminByEmail", null);
+__decorate([
+    (0, common_1.Put)('/updateAdmin'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [admin_dto_1.AdminDto]),
     __metadata("design:returntype", Promise)
-], AdminController.prototype, "addAdmin", null);
-__decorate([
-    (0, common_1.Put)('/updateAdmin/'),
-    __param(0, (0, common_1.Session)()),
-    __param(1, (0, common_1.Body)('name')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
-    __metadata("design:returntype", Object)
 ], AdminController.prototype, "updateAdmin", null);
 __decorate([
     (0, common_1.Put)('/updateManager/'),
@@ -232,33 +280,26 @@ __decorate([
     __metadata("design:returntype", Object)
 ], AdminController.prototype, "deleteConsultantId", null);
 __decorate([
+    (0, common_1.Post)('/addAdmin'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [admin_dto_1.AdminDto]),
+    __metadata("design:returntype", Promise)
+], AdminController.prototype, "addAdmin", null);
+__decorate([
     (0, common_1.Post)('/addManager'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [manager_dto_1.ManagerDto, admin_dto_1.AdminDto]),
+    __metadata("design:paramtypes", [manager_dto_1.ManagerDto]),
     __metadata("design:returntype", Promise)
 ], AdminController.prototype, "addManager", null);
 __decorate([
     (0, common_1.Post)('/addConsultant'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Consultant_dto_1.ConsultantDto, admin_dto_1.AdminDto]),
+    __metadata("design:paramtypes", [Consultant_dto_1.ConsultantDto]),
     __metadata("design:returntype", Promise)
 ], AdminController.prototype, "addConsultant", null);
-__decorate([
-    (0, common_1.Get)('/managersbyAdmin/:id'),
-    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", Object)
-], AdminController.prototype, "getManagerByAdminId", null);
-__decorate([
-    (0, common_1.Get)('/adminbyManager/:id'),
-    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", Object)
-], AdminController.prototype, "getAdminByManagerId", null);
 __decorate([
     (0, common_1.Post)('/signup'),
     __param(0, (0, common_1.Body)()),
@@ -282,16 +323,17 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "signout", null);
 __decorate([
-    (0, common_1.Post)('/email'),
+    (0, common_1.Post)('/send-email'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], AdminController.prototype, "sendEmail", null);
-exports.AdminController = AdminController = __decorate([
+AdminController = __decorate([
     (0, common_1.Controller)('admin'),
     __metadata("design:paramtypes", [admin_service_1.AdminService,
         manager_service_1.ManagerService,
         consultant_service_1.ConsultantService])
 ], AdminController);
+exports.AdminController = AdminController;
 //# sourceMappingURL=admin.controller.js.map

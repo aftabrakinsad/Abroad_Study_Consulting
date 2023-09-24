@@ -30,7 +30,7 @@ const typeorm_2 = require("typeorm");
 const admin_entity_1 = require("../entities/admin.entity");
 const bcrypt = require("bcrypt");
 const dist_1 = require("@nestjs-modules/mailer/dist");
-let AdminService = exports.AdminService = class AdminService {
+let AdminService = class AdminService {
     constructor(adminRepo, mailerService) {
         this.adminRepo = adminRepo;
         this.mailerService = mailerService;
@@ -61,28 +61,74 @@ let AdminService = exports.AdminService = class AdminService {
             throw new common_1.HttpException('Not Found', common_1.HttpStatus.NOT_FOUND);
         }
     }
+    async getAdminByName(username) {
+        const data = await this.adminRepo.findOne({ where: { username } });
+        if (data !== null) {
+            const { id, password } = data, filteredData = __rest(data, ["id", "password"]);
+            return filteredData;
+        }
+        else {
+            throw new common_1.HttpException('Not Found', common_1.HttpStatus.NOT_FOUND);
+        }
+    }
+    async getAdminByEmail(email) {
+        const data = await this.adminRepo.findOne({ where: { email } });
+        if (data !== null) {
+            const { id, password } = data, filteredData = __rest(data, ["id", "password"]);
+            return filteredData;
+        }
+        else {
+            throw new common_1.HttpException('Not Found', common_1.HttpStatus.NOT_FOUND);
+        }
+    }
     async addAdmin(mydto) {
         const salt = await bcrypt.genSalt();
-        const hassedpassed = await bcrypt.hash(mydto.password, salt);
-        mydto.password = hassedpassed;
-        await this.adminRepo.save(mydto);
+        const hashedPassword = await bcrypt.hash(mydto.password, salt);
+        mydto.password = hashedPassword;
+        const existingAdminEmail = await this.adminRepo.findOne({ where: { email: mydto.email } });
+        if (mydto.username === '') {
+            throw new common_1.HttpException({ message: "Please provide the username" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.email === '') {
+            throw new common_1.HttpException({ message: "Please provide the email" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.password === '') {
+            throw new common_1.HttpException({ message: "Please provide the password" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.address === '') {
+            throw new common_1.HttpException({ message: "Please provide the address" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else if (existingAdminEmail) {
+            throw new common_1.HttpException({ message: "Email already exists" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else {
+            await this.adminRepo.save(mydto);
+            throw new common_1.HttpException('New Admin Added', common_1.HttpStatus.OK);
+        }
     }
-    updateAdmin(username, email) {
-        return this.adminRepo.update({ email: email }, { username: username });
+    async updateAdmin(mydto) {
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(mydto.password, salt);
+        mydto.password = hashedPassword;
+        if (mydto.username === '') {
+            throw new common_1.HttpException({ message: "Please provide the username" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.password === '') {
+            throw new common_1.HttpException({ message: "Please provide the password" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.email === '') {
+            throw new common_1.HttpException({ message: "Please provide the email" }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        else {
+            await this.adminRepo.update({ email: mydto.email }, { username: mydto.username });
+            throw new common_1.HttpException('Admin Updated', common_1.HttpStatus.OK);
+        }
     }
     updateAdminbyId(mydto, id) {
         return this.adminRepo.update(id, mydto);
     }
     deleteAdminbyId(id) {
         return this.adminRepo.delete(id);
-    }
-    ManagersByAdminId(id) {
-        return this.adminRepo.find({
-            where: { id: id },
-            relations: {
-                managers: true,
-            },
-        });
     }
     async signup(mydto) {
         const salt = await bcrypt.genSalt();
@@ -125,18 +171,25 @@ let AdminService = exports.AdminService = class AdminService {
             throw new common_1.UnauthorizedException({ message: "invalid credentials" });
         }
     }
-    async Email(mydata) {
-        return await this.mailerService.sendMail({
-            to: mydata.email,
-            subject: mydata.subject,
-            text: mydata.text,
-        });
+    async sendEmail(mydata) {
+        try {
+            const result = await this.mailerService.sendMail({
+                to: mydata.email,
+                subject: mydata.subject,
+                text: mydata.content
+            });
+            return result;
+        }
+        catch (error) {
+            throw new Error(`Error sending email: ${error.message}`);
+        }
     }
 };
-exports.AdminService = AdminService = __decorate([
+AdminService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(admin_entity_1.Admin)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         dist_1.MailerService])
 ], AdminService);
+exports.AdminService = AdminService;
 //# sourceMappingURL=admin.service.js.map

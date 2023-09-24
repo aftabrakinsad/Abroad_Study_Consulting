@@ -13,7 +13,6 @@ exports.ConsultantDto = void 0;
 const class_validator_1 = require("class-validator");
 class ConsultantDto {
 }
-exports.ConsultantDto = ConsultantDto;
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
@@ -27,7 +26,12 @@ __decorate([
     __metadata("design:type", String)
 ], ConsultantDto.prototype, "email", void 0);
 __decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], ConsultantDto.prototype, "password", void 0);
+__decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], ConsultantDto.prototype, "country", void 0);
+exports.ConsultantDto = ConsultantDto;
 //# sourceMappingURL=Consultant.dto.js.map

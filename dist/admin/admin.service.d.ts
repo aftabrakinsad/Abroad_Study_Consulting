@@ -13,14 +13,22 @@ export declare class AdminService {
         username: string;
         email: string;
         address: string;
-        managers: import("../entities/manager.entity").Manager[];
+    }>;
+    getAdminByName(username: any): Promise<{
+        username: string;
+        email: string;
+        address: string;
+    }>;
+    getAdminByEmail(email: any): Promise<{
+        username: string;
+        email: string;
+        address: string;
     }>;
     addAdmin(mydto: any): Promise<void>;
-    updateAdmin(username: any, email: any): any;
+    updateAdmin(mydto: any): Promise<void>;
     updateAdminbyId(mydto: AdminUpdateDto, id: any): any;
     deleteAdminbyId(id: any): any;
-    ManagersByAdminId(id: any): any;
     signup(mydto: any): Promise<void>;
     signin(mydto: any): Promise<boolean>;
-    Email(mydata: any): Promise<SentMessageInfo>;
+    sendEmail(mydata: any): Promise<SentMessageInfo>;
 }

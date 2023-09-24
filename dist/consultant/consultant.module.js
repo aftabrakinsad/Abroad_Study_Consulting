@@ -12,9 +12,9 @@ const consultant_service_1 = require("./consultant.service");
 const consultant_entity_1 = require("../entities/consultant.entity");
 const typeorm_1 = require("@nestjs/typeorm");
 const mailer_1 = require("@nestjs-modules/mailer");
-let ConsultantModule = exports.ConsultantModule = class ConsultantModule {
+let ConsultantModule = class ConsultantModule {
 };
-exports.ConsultantModule = ConsultantModule = __decorate([
+ConsultantModule = __decorate([
     (0, common_1.Module)({
         imports: [
             mailer_1.MailerModule.forRoot({
@@ -25,7 +25,7 @@ exports.ConsultantModule = ConsultantModule = __decorate([
                     secure: true,
                     auth: {
                         user: 'rakinsadaftab@gmail.com',
-                        pass: '',
+                        pass: 'rvaxlwlwfhbztjbm',
                     },
                 }
             }),
@@ -35,4 +35,5 @@ exports.ConsultantModule = ConsultantModule = __decorate([
         providers: [consultant_service_1.ConsultantService]
     })
 ], ConsultantModule);
+exports.ConsultantModule = ConsultantModule;
 //# sourceMappingURL=consultant.module.js.map

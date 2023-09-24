@@ -16,6 +16,25 @@ export class ManagerService {
         private managerRepo: Repository<Manager>,
         private mailerService: MailerService
      ) {}
+
+    getManagers(): any {
+        return this.managerRepo.find();
+    }
+
+    async getManagerById(id)
+    {
+        const data = await this.managerRepo.findOne({ where: { id } });
+
+        if (data !== null)
+        {
+            const { id, password, ...filteredData } = data;
+            return filteredData;
+        }
+        else
+        {
+            throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+        }
+    }
     
     async manager_profie(email): Promise<any>
     {
@@ -40,18 +59,43 @@ export class ManagerService {
     //    return this.managerRepo.save(mydto);
     // }
 
-    async addManager(managerDto: ManagerDto, adminId: number): Promise<Manager> {
-        const newManager = new Manager();
-        newManager.name = managerDto.name;
-        newManager.email = managerDto.email;
-        newManager.password = managerDto.password;
-        newManager.address = managerDto.address;
+    async addManager(mydto) {
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(mydto.password, salt);
+        mydto.password = hashedPassword;
 
-        const admin = new Admin();
-        admin.id = adminId;
-        newManager.admin = admin;
+        // const existingManager = await this.managerRepo.findOne({ where: { name: mydto.name } });
+        const existingManagerEmail = await this.managerRepo.findOne({ where: { email: mydto.email } });
 
-        return this.managerRepo.save(newManager);
+        if (mydto.name === '')
+        {
+            throw new HttpException({ message: "Please provide the username" }, HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.email === '')
+        {
+            throw new HttpException({ message: "Please provide the email" }, HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.password === '')
+        {
+            throw new HttpException({ message: "Please provide the password" }, HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.address === '')
+        {
+            throw new HttpException({ message: "Please provide the address" }, HttpStatus.BAD_REQUEST);
+        }
+        // else if (existingManager)
+        // {
+        //     throw new HttpException({ message: "Username already exists" }, HttpStatus.BAD_REQUEST);
+        // }
+        else if(existingManagerEmail)
+        {
+            throw new HttpException({ message: "Email already exists" }, HttpStatus.BAD_REQUEST);
+        }
+        else 
+        {
+            await this.managerRepo.save(mydto);
+            throw new HttpException('Manager Added Successful.', HttpStatus.OK);
+        }
     }
 
     updateManager(name, email): any
@@ -69,14 +113,14 @@ export class ManagerService {
         return this.managerRepo.delete(id);
     }
         
-    getAdminByManagerID(id): any {
-        return this.managerRepo.find({ 
-            where: { id: id },
-            relations: {
-                admin: true,
-            },
-        });
-    }
+    // getAdminByManagerID(id): any {
+    //     return this.managerRepo.find({ 
+    //         where: { id: id },
+    //         relations: {
+    //             admin: true,
+    //         },
+    //     });
+    // }
 
     async signup(mydto)
     {

@@ -50,16 +50,106 @@ export class AdminService {
         }
     }
 
-    async addAdmin(mydto) {
-        const salt = await bcrypt.genSalt();
-        const hassedpassed = await bcrypt.hash(mydto.password, salt);
-        mydto.password= hassedpassed;
-        await this.adminRepo.save(mydto);
+    async getAdminByName(username)
+    {
+        const data = await this.adminRepo.findOne({ where: { username } });
+
+        if (data !== null)
+        {
+            const { id, password, ...filteredData } = data;
+            return filteredData;
+        }
+        else
+        {
+            throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+        }
     }
 
-    updateAdmin(username, email): any
+    async getAdminByEmail(email)
     {
-        return this.adminRepo.update({ email:email },{ username:username });
+        const data = await this.adminRepo.findOne({ where: { email } });
+
+        if (data !== null)
+        {
+            const { id, password, ...filteredData } = data;
+            return filteredData;
+        }
+        else
+        {
+            throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+        }
+    }
+
+    async addAdmin(mydto)
+    {
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(mydto.password, salt);
+        mydto.password = hashedPassword;
+
+        // const existingAdmin = await this.adminRepo.findOne({ where: { username: mydto.username } });
+        const existingAdminEmail = await this.adminRepo.findOne({ where: { email: mydto.email } });
+
+        if (mydto.username === '')
+        {
+            throw new HttpException({ message: "Please provide the username" }, HttpStatus.BAD_REQUEST);
+        } 
+        else if (mydto.email === '')
+        {
+            throw new HttpException({ message: "Please provide the email" }, HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.password === '')
+        {
+            throw new HttpException({ message: "Please provide the password" }, HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.address === '')
+        {
+            throw new HttpException({ message: "Please provide the address" }, HttpStatus.BAD_REQUEST);
+        }
+        // else if (existingAdmin)
+        // {
+        //     throw new HttpException({ message: "Username already exists" }, HttpStatus.BAD_REQUEST);
+        // }
+        else if(existingAdminEmail)
+        {
+            throw new HttpException({ message: "Email already exists" }, HttpStatus.BAD_REQUEST);
+        }
+        else 
+        {
+            await this.adminRepo.save(mydto);
+            throw new HttpException('New Admin Added', HttpStatus.OK);
+        }
+    }
+
+    async updateAdmin(mydto)
+    {
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(mydto.password, salt);
+        mydto.password = hashedPassword;
+
+        // const existingAdmin = await this.adminRepo.findOne({ where: { username: mydto.username } });
+        // const existingAdminEmail = await this.adminRepo.findOne({ where: { email: mydto.email } });
+
+        if (mydto.username === '')
+        {
+            throw new HttpException({ message: "Please provide the username" }, HttpStatus.BAD_REQUEST);
+        } 
+        else if (mydto.password === '')
+        {
+            throw new HttpException({ message: "Please provide the password" }, HttpStatus.BAD_REQUEST);
+        }
+        else if (mydto.email === '')
+        {
+            throw new HttpException({ message: "Please provide the email" }, HttpStatus.BAD_REQUEST);
+        }
+        // else if(existingAdminEmail)
+        // {
+        //     throw new HttpException({ message: "Email already exists" }, HttpStatus.BAD_REQUEST);
+        // }
+        else 
+        {
+            await this.adminRepo.update({ email:mydto.email },{ username:mydto.username });
+            throw new HttpException('Admin Updated', HttpStatus.OK);
+        }
     }
 
     updateAdminbyId(mydto: AdminUpdateDto, id): any
@@ -72,15 +162,15 @@ export class AdminService {
         return this.adminRepo.delete(id);
     }
         
-    ManagersByAdminId(id): any
-    {
-        return this.adminRepo.find({ 
-            where: {id:id},
-            relations: {
-                managers: true,
-            },
-        });
-    }
+    // ManagersByAdminId(id): any
+    // {
+    //     return this.adminRepo.find({ 
+    //         where: {id:id},
+    //         relations: {
+    //             managers: true,
+    //         },
+    //     });
+    // }
 
     async signup(mydto)
     {
@@ -139,12 +229,16 @@ export class AdminService {
         }
     }
 
-    async Email(mydata)
-    {
-        return  await this.mailerService.sendMail({
-            to: mydata.email,
-            subject: mydata.subject,
-            text: mydata.text, 
-        });
+    async sendEmail(mydata) {
+    try {
+      const result = await this.mailerService.sendMail({
+        to: mydata.email,
+        subject: mydata.subject,
+        text: mydata.content
+      });
+      return result;
+    } catch (error) {
+      throw new Error(`Error sending email: ${error.message}`);
     }
+  }
 }

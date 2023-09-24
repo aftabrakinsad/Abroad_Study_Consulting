@@ -16,7 +16,7 @@ exports.ManagerController = void 0;
 const common_1 = require("@nestjs/common");
 const manager_service_1 = require("./manager.service");
 const manager_dto_1 = require("../dtos/manager.dto");
-let ManagerController = exports.ManagerController = class ManagerController {
+let ManagerController = class ManagerController {
     constructor(managerService) {
         this.managerService = managerService;
     }
@@ -85,8 +85,9 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], ManagerController.prototype, "sendEmail", null);
-exports.ManagerController = ManagerController = __decorate([
+ManagerController = __decorate([
     (0, common_1.Controller)('consultant'),
     __metadata("design:paramtypes", [manager_service_1.ManagerService])
 ], ManagerController);
+exports.ManagerController = ManagerController;
 //# sourceMappingURL=manager.controller.js.map
